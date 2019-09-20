@@ -33,6 +33,7 @@ createConnection().then(async connection => {
     app.listen(3000);
 
     // insert new users for test
+	
     await connection.manager.save(connection.manager.create(User, {
         username: "ivan",
         password: Md5.init('ivan')
