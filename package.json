@@ -9,6 +9,7 @@
     "start": "ts-node src/index.ts"
   },
   "dependencies": {
+    "@hapi/joi": "^16.1.4",
     "body-parser": "^1.18.1",
     "express": "^4.15.4",
     "md5-typescript": "^1.0.5",
