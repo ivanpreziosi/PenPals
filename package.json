@@ -1,0 +1,23 @@
+{
+  "name": "PenPals",
+  "author": "Ivan Preziosi <ivan.preziosi@gmail.com>",
+  "version": "0.0.1",
+  "license": "MIT",
+  "description": "PenPals is a simple 'Kind Words' like game made to be used during gamedev lessons and to be released as an Open Source project.",
+  "private": true,
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "typeorm": "0.2.19",
+    "reflect-metadata": "^0.1.10",
+    "mysql": "^2.14.1",
+    "express": "^4.15.4",
+    "body-parser": "^1.18.1"
+  },
+  "devDependencies": {
+    "ts-node": "3.3.0",
+    "@types/node": "^8.0.29",
+    "typescript": "3.3.3333"
+  }
+}
