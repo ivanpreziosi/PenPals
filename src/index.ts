@@ -5,6 +5,7 @@ import * as bodyParser from "body-parser";
 import {Request, Response} from "express";
 import {Routes} from "./routes";
 import {User} from "./entity/User";
+import {Md5} from "md5-typescript";
 
 createConnection().then(async connection => {
 
@@ -33,14 +34,12 @@ createConnection().then(async connection => {
 
     // insert new users for test
     await connection.manager.save(connection.manager.create(User, {
-        firstName: "Timber",
-        lastName: "Saw",
-        age: 27
+        username: "ivan",
+        password: Md5.init('ivan')
     }));
     await connection.manager.save(connection.manager.create(User, {
-        firstName: "Phantom",
-        lastName: "Assassin",
-        age: 24
+        username: "ivan2",
+        password: Md5.init('ivan')
     }));
 
     console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");

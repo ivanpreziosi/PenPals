@@ -6,13 +6,13 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    firstName: string;
+    @Column("varchar", { length: 32 })
+    username: string;
 
-    @Column()
-    lastName: string;
-
-    @Column()
-    age: number;
+    @Column("varchar", { length: 32 })
+    password: string;
+	
+	@Column("timestamp")
+    user_create_time: number;
 
 }
