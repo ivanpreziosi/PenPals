@@ -33,7 +33,7 @@ createConnection().then(async connection => {
     app.listen(3000);
 
     // insert new users for test
-	
+	/*
     await connection.manager.save(connection.manager.create(User, {
         username: "ivan",
         password: Md5.init('ivan')
@@ -42,7 +42,7 @@ createConnection().then(async connection => {
         username: "ivan2",
         password: Md5.init('ivan')
     }));
-
+	*/
     console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
 
 }).catch(error => console.log(error));

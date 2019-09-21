@@ -14,5 +14,11 @@ export class User {
 	
 	@Column("timestamp")
     user_create_time: number;
+	
+	@Column("varchar", { length: 32 })
+    session_token: string;
+	
+	@Column("timestamp")
+    session_create_time: number;
 
 }
