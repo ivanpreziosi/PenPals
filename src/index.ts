@@ -12,6 +12,7 @@ createConnection().then(async connection => {
     // create express app
     const app = express();
     app.use(bodyParser.json());
+    app.use(express.json()) // for parsing application/json
 
     // register express routes from defined application routes
     Routes.forEach(route => {
