@@ -8,11 +8,16 @@ import {User} from "./entity/User";
 import {Md5} from "md5-typescript";
 
 createConnection().then(async connection => {
+    
+    var listenPort = "1312";
 
     // create express app
     const app = express();
-    app.use(bodyParser.json());
-    app.use(express.json()) // for parsing application/json
+    app.use(bodyParser.urlencoded({
+      extended: true
+    }));
+    
+    //app.use(express.json()) // for parsing application/json
 
     // register express routes from defined application routes
     Routes.forEach(route => {
@@ -31,7 +36,7 @@ createConnection().then(async connection => {
     // ...
 
     // start express server
-    app.listen(3000);
+    app.listen(listenPort);
 
     // insert new users for test
 	/*
@@ -44,6 +49,6 @@ createConnection().then(async connection => {
         password: Md5.init('ivan')
     }));
 	*/
-    console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
+    console.log("Express server has started on port "+listenPort+". Open http://localhost:3000/users to see results");
 
 }).catch(error => console.log(error));
