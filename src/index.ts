@@ -55,3 +55,4 @@ createConnection().then(async connection => {
     console.log("Express server has started on port "+listenPort+". Open http://localhost:3000/users to see results");
 
 }).catch(error => console.log(error));
+

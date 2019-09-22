@@ -4,17 +4,33 @@ import {User} from "../entity/User";
 import {Md5} from "md5-typescript";
 var DefaultResponse = require('../helpers/DefaultResponse');
 var AppConfig = require('../app_config');
+var PAuth = require('../helpers/PenpalsAuthentication');
 
 export class UserController {
 
     private userRepository = getRepository(User);
 
-    async all(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.find();
+    async profile(request: Request, response: Response, next: NextFunction) {        
+        if(!PAuth.checkAuth(request)){
+            return PAuth.unauthorizedResponse;
+        }
+        return PAuth.checkAuth(request);
+        /*
+        try{
+            let result = await this.userRepository.findOne(userId);
+            return result;
+        }catch(e){
+            return e;
+        }
+        */
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.findOne(request.params.id);
+        DefaultResponse.responseData.status = "KO";
+        DefaultResponse.responseData.code = "FORBIDDEN";
+        DefaultResponse.responseData.message = "This is not available.";
+        response.set('status',403);
+        return DefaultResponse.responseData;
     }
     
     /**

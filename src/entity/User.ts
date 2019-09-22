@@ -23,26 +23,30 @@ export class User {
 	})
     password: string;
 	
-	@Column("timestamp")
+	@Column({
+		type: "timestamp",
+		select: false
+	})
     user_create_time: number;
 	
 	@Column({
 		type: "varchar",
 		length: 32,
-		nullable: true
+		nullable: true,
+		select: false
 	})
     session_token: string;
 	
 	@Column({
 		type: "timestamp",
-		nullable: true
+		nullable: true,
+		select: false
 	})
     session_create_time: number;
 	
 	//SETS A NEW A TOKEN
 	SetToken(request: Request){
 		let userTimestamp = PenpalsDateUtils.getMysqlDateNow();
-		var remoteIp = request.header('x-forwarded-for');
 		this.session_token = this.CreateToken(request);
         this.session_create_time = userTimestamp;
 	}
@@ -58,8 +62,8 @@ export class User {
 	
 	//CreateToken
 	CreateToken(request: Request){
-		var remoteIp = request.header('x-forwarded-for');
-		return  Md5.init(this.username+this.password+remoteIp);
+		var remoteIp = request.connection.remoteAddress;
+		return  Md5.init(this.username+remoteIp);
 	}
 
 }

@@ -2,11 +2,12 @@ import {UserController} from "./controller/UserController";
 
 var AppConfig = require('./app_config');
 
-export const Routes = [{
+export const Routes = [
+{
     method: "get",
     route: "/"+AppConfig.version+"/users",
     controller: UserController,
-    action: "all"
+    action: "profile"
 }, 
 {
     method: "get",
@@ -31,4 +32,5 @@ export const Routes = [{
     route: "/"+AppConfig.version+"/login",
     controller: UserController,
     action: "login"
-}];
+}
+];
