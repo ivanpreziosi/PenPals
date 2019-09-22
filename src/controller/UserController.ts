@@ -16,11 +16,11 @@ export class UserController {
     async one(request: Request, response: Response, next: NextFunction) {
         return this.userRepository.findOne(request.params.id);
     }
-
-    async save(request: Request, response: Response, next: NextFunction) {
-        
-        
-        
+    
+    /**
+    // Save user POST
+    **/
+    async save(request: Request, response: Response, next: NextFunction) {        
         // VALIDATE DATA
 		const Joi = require('@hapi/joi');
 
@@ -46,6 +46,7 @@ export class UserController {
             DefaultResponse.responseData.status = "KO";
             DefaultResponse.responseData.code = "DATA-VALIDATION";
             DefaultResponse.responseData.message = validation.error.details[0].message;
+            response.set('status',400);
             return DefaultResponse.responseData;
         }
          
@@ -65,11 +66,14 @@ export class UserController {
             DefaultResponse.responseData.status = "OK";
             DefaultResponse.responseData.code = "USER-SAVED";
             DefaultResponse.responseData.message = "User saved successfully.";
+            response.set('status',201);
+            response.set('Pp-S-Tk',user.session_token);
         }catch(e){
             console.log(e);
             DefaultResponse.responseData.status = "KO";
             DefaultResponse.responseData.code = e.code;
             DefaultResponse.responseData.message = e.message;
+            response.set('status',418);
         }
         return DefaultResponse.responseData;
         

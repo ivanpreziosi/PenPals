@@ -7,6 +7,9 @@ import {Routes} from "./routes";
 import {User} from "./entity/User";
 import {Md5} from "md5-typescript";
 
+var AppConfig = require('./app_config');
+
+
 createConnection().then(async connection => {
     
     var listenPort = "1312";
