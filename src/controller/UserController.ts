@@ -45,20 +45,20 @@ export class UserController {
         if(validation.error != null && validation.error != undefined){
             DefaultResponse.responseData.status = "KO";
             DefaultResponse.responseData.code = "DATA-VALIDATION";
-            DefaultResponse.responseData.message = validation.error.details[0].message;
+            for(var ii = 0;ii<validation.error.details.length;ii++){
+                DefaultResponse.responseData.message = validation.error.details[ii].message+" ** ";
+            }
             response.set('status',400);
             return DefaultResponse.responseData;
         }
          
-        //create model
-        
+        //create model        
         let user = new User();
         user.username = request.body.username;
         user.password = Md5.init(request.body.password);
         user.SetToken(request);
         
-        //save model  
-        
+        //save model          
         try{
             let result = await this.userRepository.save(user);
             console.log(result);
@@ -81,6 +81,68 @@ export class UserController {
     async remove(request: Request, response: Response, next: NextFunction) {
         let userToRemove = await this.userRepository.findOne(request.params.id);
         await this.userRepository.remove(userToRemove);
+    }
+    
+    async login(request: Request, response: Response, next: NextFunction) {
+        // VALIDATE DATA
+		const Joi = require('@hapi/joi');
+
+		const schema = Joi.object({
+            username: Joi.string()
+                .alphanum()
+                .min(3)
+                .max(32)
+                .required(),
+
+            password: Joi.string()
+                .pattern(/^[a-zA-Z0-9]{3,30}$/)
+                .min(6)
+                .max(32)
+                .required(),
+        })
+        
+        let validation = schema.validate(request.body);
+        
+        if(validation.error != null && validation.error != undefined){
+            DefaultResponse.responseData.status = "KO";
+            DefaultResponse.responseData.code = "DATA-VALIDATION";
+            for(var ii = 0;ii<validation.error.details.length;ii++){
+                DefaultResponse.responseData.message = validation.error.details[ii].message+" ** ";
+            }
+            response.set('status',400);
+            return DefaultResponse.responseData;
+        }
+        
+        //find user in db
+        try{
+            let result = await this.userRepository.find({
+                where: [
+                    { username: request.body.username, password: Md5.init(request.body.password) }
+                ]
+            });
+            if(result.length<1){
+                throw {
+                    code: "LOGIN-ERROR",
+                    message: "Login unsuccesfull, check your credentials."
+                };
+            }
+            let user = result[0];
+            console.log(user);
+            DefaultResponse.responseData.status = "OK";
+            DefaultResponse.responseData.code = "USER-LOGGED-IN";
+            DefaultResponse.responseData.message = "User logged in successfully.";
+            response.set('status',200);
+            response.set(AppConfig.appTokenName,user.session_token);
+        }catch(e){
+            console.log(e);
+            DefaultResponse.responseData.status = "KO";
+            DefaultResponse.responseData.code = e.code;
+            DefaultResponse.responseData.message = e.message;
+            response.set('status',418);
+        }
+        
+        return DefaultResponse.responseData;
+        
     }
 
 }
