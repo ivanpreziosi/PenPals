@@ -2,6 +2,8 @@ import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {User} from "../entity/User";
 import {Md5} from "md5-typescript";
+var PenpalsDateUtils = require('../helpers/PenpalsDateUtils');
+var DefaultResponse = require('../helpers/DefaultResponse');
 
 export class UserController {
 
@@ -16,6 +18,8 @@ export class UserController {
     }
 
     async save(request: Request, response: Response, next: NextFunction) {
+        
+        
         
         // VALIDATE DATA
 		const Joi = require('@hapi/joi');
@@ -36,34 +40,39 @@ export class UserController {
             repeat_password: Joi.ref('password'),
         })
         
-        var validation = schema.validate(request.body);
+        let validation = schema.validate(request.body);
         
         if(validation.error != null && validation.error != undefined){
-            return validation;
+            DefaultResponse.responseData.status = "KO";
+            DefaultResponse.responseData.code = "DATA-VALIDATION";
+            DefaultResponse.responseData.message = validation.error.details[0].message;
+            return DefaultResponse.responseData;
         }
          
-        //EXTRACT DATA
-        var userTimestamp = new Date().getTime();
-        var userData = {
-            username: request.body.username,
-            password: Md5.init(request.body.password),
-            sessionCreateTime: userTimestamp,
-            sessionToken: Md5.init(request.body.username+request.body.password+userTimestamp)
+        //create model
+        let userTimestamp = PenpalsDateUtils.getMysqlDateNow();
+        let user = new User();
+        user.username = request.body.username;
+        user.password = Md5.init(request.body.password);
+        user.session_token = Md5.init(request.body.username+request.body.password+userTimestamp);
+        user.session_create_time = userTimestamp;
+        
+        //save model  
+        
+        try{
+            let result = await this.userRepository.save(user);
+            console.log(result);
+            DefaultResponse.responseData.status = "OK";
+            DefaultResponse.responseData.code = "USER-SAVED";
+            DefaultResponse.responseData.message = "User saved successfully.";
+        }catch(e){
+            console.log(e);
+            DefaultResponse.responseData.status = "KO";
+            DefaultResponse.responseData.code = e.code;
+            DefaultResponse.responseData.message = e.message;
         }
+        return DefaultResponse.responseData;
         
-        var existingUser = this.userRepository.find({
-          where: [
-            { username: userData.username }
-          ]
-        });
-        
-        if(existingUser.length !== 0){
-            return {
-                error: "This username is already taken! Choose another please."
-            };
-        }    
-        
-        return this.userRepository.save(userData);
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
