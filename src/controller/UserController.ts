@@ -2,8 +2,8 @@ import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {User} from "../entity/User";
 import {Md5} from "md5-typescript";
-var PenpalsDateUtils = require('../helpers/PenpalsDateUtils');
 var DefaultResponse = require('../helpers/DefaultResponse');
+var AppConfig = require('../app_config');
 
 export class UserController {
 
@@ -51,12 +51,11 @@ export class UserController {
         }
          
         //create model
-        let userTimestamp = PenpalsDateUtils.getMysqlDateNow();
+        
         let user = new User();
         user.username = request.body.username;
         user.password = Md5.init(request.body.password);
-        user.session_token = Md5.init(request.body.username+request.body.password+userTimestamp);
-        user.session_create_time = userTimestamp;
+        user.SetToken(request);
         
         //save model  
         
@@ -67,7 +66,7 @@ export class UserController {
             DefaultResponse.responseData.code = "USER-SAVED";
             DefaultResponse.responseData.message = "User saved successfully.";
             response.set('status',201);
-            response.set('Pp-S-Tk',user.session_token);
+            response.set(AppConfig.appTokenName,user.session_token);
         }catch(e){
             console.log(e);
             DefaultResponse.responseData.status = "KO";
