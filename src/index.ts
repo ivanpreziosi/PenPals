@@ -27,25 +27,29 @@ createConnection().then(async connection => {
     Routes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
             
+            var isAuth = true;
+            
             if(!route.isPublic){                
-                {
-                   let userRepository = getRepository(User);
-                        var Auth = require('./helpers/PenpalsAuthentication');
-                        const authResult = Auth.checkAuth(req,userRepository);
-                        res.set('status',200);
-                        authResult.then(result => result !== null && result !== undefined ? res.send(result) : undefined).catch(e => res.json(require('./helpers/UnauthorizedResponse')));
-                }
-                next;
-                
-                
+            
+                let userRepository = getRepository(User);
+                var Auth = require('./helpers/PenpalsAuthentication');
+                const authResult = Auth.checkAuth(req,userRepository);
+                authResult.then(result => result !== null && result !== undefined ? res.json(result) : undefined).catch(e => isAuth = false);                
             }
-            const result = (new (route.controller as any))[route.action](req, res, next);
-            if (result instanceof Promise) {
-                result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
+            
+            if(isAuth){
+                const result = (new (route.controller as any))[route.action](req, res, next);
+                if (result instanceof Promise) {
+                    result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
 
-            } else if (result !== null && result !== undefined) {
-                res.json(result);
+                } else if (result !== null && result !== undefined) {
+                    res.json(result);
+                }
+            }else
+            {
+                res.json(require('./helpers/UnauthorizedResponse'));
             }
+            
         });
     });
 

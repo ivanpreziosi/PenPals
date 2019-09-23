@@ -10,21 +10,14 @@ export class UserController {
 
     private userRepository = getRepository(User);
 
-    async profile(request: Request, response: Response, next: NextFunction) {      
-        /*var authResult = PAuth.checkAuth(request);
-        if(!authResult){
-            return PAuth.unauthorizedResponse;
-        }
-        return authResult;
-        */
-        /*
+    async profile(request: Request, response: Response, next: NextFunction) {              
         try{
-            let result = await this.userRepository.findOne(userId);
+            let result = await this.userRepository.find();
             return result;
         }catch(e){
             return e;
         }
-        */
+        
     }
 
     async one(request: Request, response: Response, next: NextFunction) {

@@ -5,7 +5,6 @@ exports.checkAuth = async function (request,userRepository) {
 	  const Repository = require("typeorm");
 	  const User= require("../entity/User");
 	  var userRepository = userRepository;
-	  var authResult;
 	
 
 		
@@ -15,30 +14,30 @@ exports.checkAuth = async function (request,userRepository) {
 	  let controlToken = Hasher.Md5.init(hUsername+hIp);
 
 
-
 	  //controllo formale
 	  if(hToken !== controlToken){
 	  //hToken formalmente non valido
 	  	throw new Error("Token formally invalid");
 	  }
 
-
-
 	  //controllo record
 	  var result = await userRepository.find({
 			usernamae: hUsername,
 			session_token: controlToken
 	  });
+	  
+	  //controllo scadenza token
 
 	  if(result.length != 1){
-	  //non esiste questo utente
+	  	//non esiste questo utente		
 	  	throw new Error("Non existent user");
 	  }
 		
-	  authResult = JSON.stringify(result[0]);
+	  var authResult = JSON.stringify(result[0]);
 	  //console.log(authResult);
 	  return authResult;
 		
+
 
 };
 
