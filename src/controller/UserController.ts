@@ -4,17 +4,19 @@ import {User} from "../entity/User";
 import {Md5} from "md5-typescript";
 var DefaultResponse = require('../helpers/DefaultResponse');
 var AppConfig = require('../app_config');
-var PAuth = require('../helpers/PenpalsAuthentication');
+//var PAuth = require('../helpers/PenpalsAuthentication');
 
 export class UserController {
 
     private userRepository = getRepository(User);
 
-    async profile(request: Request, response: Response, next: NextFunction) {        
-        if(!PAuth.checkAuth(request)){
+    async profile(request: Request, response: Response, next: NextFunction) {      
+        /*var authResult = PAuth.checkAuth(request);
+        if(!authResult){
             return PAuth.unauthorizedResponse;
         }
-        return PAuth.checkAuth(request);
+        return authResult;
+        */
         /*
         try{
             let result = await this.userRepository.findOne(userId);

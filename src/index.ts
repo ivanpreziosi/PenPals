@@ -6,6 +6,7 @@ import {Request, Response} from "express";
 import {Routes} from "./routes";
 import {User} from "./entity/User";
 import {Md5} from "md5-typescript";
+import {getRepository} from "typeorm";
 
 var AppConfig = require('./app_config');
 
@@ -25,6 +26,19 @@ createConnection().then(async connection => {
     // register express routes from defined application routes
     Routes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
+            
+            if(!route.isPublic){                
+                {
+                   let userRepository = getRepository(User);
+                        var Auth = require('./helpers/PenpalsAuthentication');
+                        const authResult = Auth.checkAuth(req,userRepository);
+                        res.set('status',200);
+                        authResult.then(result => result !== null && result !== undefined ? res.send(result) : undefined).catch(e => res.json(require('./helpers/UnauthorizedResponse')));
+                }
+                next;
+                
+                
+            }
             const result = (new (route.controller as any))[route.action](req, res, next);
             if (result instanceof Promise) {
                 result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);

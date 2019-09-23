@@ -7,30 +7,35 @@ export const Routes = [
     method: "get",
     route: "/"+AppConfig.version+"/users",
     controller: UserController,
-    action: "profile"
+    action: "profile",
+    isPublic: false
 }, 
 {
     method: "get",
     route: "/"+AppConfig.version+"/users/:id",
     controller: UserController,
-    action: "one"
+    action: "one",
+    isPublic: true
 }, 
 {
     method: "post",
     route: "/"+AppConfig.version+"/users",
     controller: UserController,
-    action: "save"
+    action: "save",
+    isPublic: true
 }, 
 {
     method: "delete",
     route: "/"+AppConfig.version+"/users/:id",
     controller: UserController,
-    action: "remove"
+    action: "remove",
+    isPublic: false
 }, 
 {
     method: "post",
     route: "/"+AppConfig.version+"/login",
     controller: UserController,
-    action: "login"
+    action: "login",
+    isPublic: true
 }
 ];
