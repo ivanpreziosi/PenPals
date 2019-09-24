@@ -33,18 +33,19 @@ createConnection().then(async connection => {
 				authResult.then(function(ar) {
 					const result = (new (route.controller as any))[route.action](req, res, next);
 					if (result instanceof Promise) {
-						result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./helpers/UnauthorizedResponse'))).catch(e => res.json(require('./helpers/UnauthorizedResponse')));
+						result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./tpl/UnauthorizedResponse'))).catch(e => res.json(require('./tpl/UnauthorizedResponse')));
 					} else if (result !== null && result !== undefined) {
 						res.json(result);
 					}
 				}, function(err) {
-					res.json(require('./helper/UnauthorizedResponse'));
+					res.json(require('./tpl/UnauthorizedResponse'));
 				});				
 			}else
             {
+				console.log("Public");
                 const result = (new (route.controller as any))[route.action](req, res, next);
                 if (result instanceof Promise) {
-                    result.then(result => result !== null && result !== undefined ? res.json(result) : undefined).catch(e => res.json(require('./helpers/UnauthorizedResponse')));
+                    result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./tpl/UnauthorizedResponse'))).catch(e => res.json(require('./tpl/UnauthorizedResponse')));
                 } else if (result !== null && result !== undefined) {
                     res.json(result);
                 }
