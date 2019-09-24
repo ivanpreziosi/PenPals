@@ -138,6 +138,8 @@ export class UserController {
                 };
             }
             let user = result[0];
+            user.SetToken(request);
+            await this.userRepository.save(user);
             console.log(user);
             DefaultResponse.responseData.status = "OK";
             DefaultResponse.responseData.code = "USER-LOGGED-IN";

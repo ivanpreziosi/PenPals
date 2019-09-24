@@ -44,6 +44,7 @@ export class User {
 		select: false
 	})
     session_create_time: number;
+
 	
 	//SETS A NEW A TOKEN
 	SetToken(request: Request){

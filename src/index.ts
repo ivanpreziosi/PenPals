@@ -69,7 +69,7 @@ createConnection().then(async connection => {
         password: Md5.init('ivan')
     }));
 	*/
-    console.log("Express server has started on port "+listenPort+". Open http://localhost:3000/users to see results");
+    console.log("Penpals server has started on port "+listenPort+". Open http://localhost:"+listenPort+"/users to see results");
 
 }).catch(error => console.log(error));
 
