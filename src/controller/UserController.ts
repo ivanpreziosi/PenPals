@@ -4,7 +4,6 @@ import {User} from "../entity/User";
 import {Md5} from "md5-typescript";
 var DefaultResponse = require('../helper/DefaultResponse');
 var AppConfig = require('../app_config');
-//var PAuth = require('../helper/PenpalsAuthentication');
 
 export class UserController {
 
@@ -90,8 +89,8 @@ export class UserController {
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
-        let userToRemove = await this.userRepository.findOne(request.params.id);
-        await this.userRepository.remove(userToRemove);
+        //let userToRemove = await this.userRepository.findOne(request.params.id);
+        //await this.userRepository.remove(userToRemove);
     }
     
     async login(request: Request, response: Response, next: NextFunction) {
@@ -127,6 +126,7 @@ export class UserController {
         //find user in db
         try{
             let result = await this.userRepository.find({
+                select: ['id', 'username', 'session_token'],
                 where: [
                     { username: request.body.username, password: Md5.init(request.body.password) }
                 ]

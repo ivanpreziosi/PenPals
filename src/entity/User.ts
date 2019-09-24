@@ -66,5 +66,5 @@ export class User {
 		var remoteIp = request.connection.remoteAddress;
 		return  Md5.init(this.username+remoteIp+AppConfig.appTokenSalt);
 	}
-
+	
 }

@@ -16,6 +16,9 @@ exports.checkAuth = async function (request,userRepository) {
 	  //controllo formale
 	  if(hToken !== controlToken){
 	  //hToken formalmente non valido
+	  
+	  //azzero il token per sicurezza
+	  
 	  	throw new Error("Token formally invalid");
 	  }
 
