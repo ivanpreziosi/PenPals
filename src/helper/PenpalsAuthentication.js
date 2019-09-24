@@ -18,9 +18,7 @@ exports.checkAuth = async function (request,userRepository) {
 		//hToken formalmente non valido
 		  console.log('MALFORMED-TOKEN');
 		//azzero il token per sicurezza
-		var userToUpdate = await userRepository.findOne({
-			username: hUsername
-		}).then(function(userToUpdate){
+		var userToUpdate = await userRepository.findByUsername(hUsername).then(function(userToUpdate){
 			userToUpdate.session_token = null;
 			userToUpdate.session_create_time = null;
 			userRepository.save(userToUpdate).then(user => console.log(user));
@@ -53,4 +51,4 @@ exports.checkAuth = async function (request,userRepository) {
 
 };
 
-exports.unauthorizedResponse = require('./UnauthorizedResponse');
+exports.unauthorizedResponse = require('../tpl/UnauthorizedResponse');

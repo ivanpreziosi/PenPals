@@ -7,6 +7,8 @@ import {Routes} from "./routes";
 import {User} from "./entity/User";
 import {Md5} from "md5-typescript";
 import {getRepository} from "typeorm";
+import {getCustomRepository} from "typeorm";
+import {UserRepository} from "./repository/UserRepository";
 
 var AppConfig = require('./app_config');
 
@@ -27,7 +29,7 @@ createConnection().then(async connection => {
     Routes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {			
 			if(!route.isPublic){
-				let userRepository = getRepository(User);
+				let userRepository = getCustomRepository(UserRepository);
 				var Auth = require('./helper/PenpalsAuthentication');
 				const authResult = Auth.checkAuth(req,userRepository); 
 				authResult.then(function(ar) {

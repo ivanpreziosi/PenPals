@@ -45,7 +45,6 @@ export class User {
 	})
     session_create_time: number;
 
-	
 	//SETS A NEW A TOKEN
 	SetToken(request: Request){
 		let userTimestamp = PenpalsDateUtils.getMysqlDateNow();
@@ -67,5 +66,6 @@ export class User {
 		var remoteIp = request.connection.remoteAddress;
 		return  Md5.init(this.username+remoteIp+AppConfig.appTokenSalt);
 	}
+	
 	
 }
