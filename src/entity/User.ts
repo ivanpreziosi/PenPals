@@ -1,7 +1,8 @@
 import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
 import {Request} from "express";
 import {Md5} from "md5-typescript";
-var PenpalsDateUtils = require('../helpers/PenpalsDateUtils');
+var PenpalsDateUtils = require('../helper/PenpalsDateUtils');
+var AppConfig = require('../app_config');
 
 @Entity()
 export class User {
@@ -63,7 +64,7 @@ export class User {
 	//CreateToken
 	CreateToken(request: Request){
 		var remoteIp = request.connection.remoteAddress;
-		return  Md5.init(this.username+remoteIp+"super-salty-string-3xcc22dl2dkx2");
+		return  Md5.init(this.username+remoteIp+AppConfig.appTokenSalt);
 	}
 
 }

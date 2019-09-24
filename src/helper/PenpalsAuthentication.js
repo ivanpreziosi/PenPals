@@ -1,17 +1,16 @@
 
 exports.checkAuth = async function (request,userRepository) {
 	
-	  const Hasher = require("md5-typescript");
-	  const Repository = require("typeorm");
-	  const User= require("../entity/User");
-	  var userRepository = userRepository;
-	
-
-		
-	  let hUsername = request.header('username');
-	  let hToken = request.header(require('../app_config').appTokenName);
-	  let hIp = request.connection.remoteAddress;
-	  let controlToken = Hasher.Md5.init(hUsername+hIp);
+	const Hasher = require("md5-typescript");
+	const Repository = require("typeorm");
+	const User= require("../entity/User");
+	var userRepository = userRepository;	  
+	var AppConfig = require('../app_config');
+	  
+	let hUsername = request.header('username');
+	let hToken = request.header(require('../app_config').appTokenName);
+	let hIp = request.connection.remoteAddress;
+	let controlToken = Hasher.Md5.init(hUsername+hIp+AppConfig.appTokenSalt);
 
 
 	  //controllo formale

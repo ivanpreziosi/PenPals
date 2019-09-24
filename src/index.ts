@@ -28,17 +28,17 @@ createConnection().then(async connection => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {			
 			if(!route.isPublic){
 				let userRepository = getRepository(User);
-				var Auth = require('./helpers/PenpalsAuthentication');
+				var Auth = require('./helper/PenpalsAuthentication');
 				const authResult = Auth.checkAuth(req,userRepository); 
 				authResult.then(function(ar) {
 					const result = (new (route.controller as any))[route.action](req, res, next);
 					if (result instanceof Promise) {
-						result.then(result => result !== null && result !== undefined ? res.json(result) : undefined).catch(e => res.json(require('./helpers/UnauthorizedResponse')));
+						result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./helpers/UnauthorizedResponse'))).catch(e => res.json(require('./helpers/UnauthorizedResponse')));
 					} else if (result !== null && result !== undefined) {
 						res.json(result);
 					}
 				}, function(err) {
-					res.json(require('./helpers/UnauthorizedResponse'));
+					res.json(require('./helper/UnauthorizedResponse'));
 				});				
 			}else
             {
