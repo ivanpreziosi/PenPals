@@ -25,9 +25,7 @@ createConnection().then(async connection => {
 
     // register express routes from defined application routes
     Routes.forEach(route => {
-        (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
-
-			
+        (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {			
 			if(!route.isPublic){
 				let userRepository = getRepository(User);
 				var Auth = require('./helpers/PenpalsAuthentication');
@@ -43,9 +41,6 @@ createConnection().then(async connection => {
 					res.json(require('./helpers/UnauthorizedResponse'));
 				});				
 			}
-            
-            
-            
         });
     });
 
