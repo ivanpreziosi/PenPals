@@ -13,7 +13,7 @@ var AppConfig = require('./app_config');
 
 createConnection().then(async connection => {
     
-    var listenPort = "1312";
+    var listenPort = AppConfig.listenPort;
 
     // create express app
     const app = express();
