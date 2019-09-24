@@ -40,7 +40,15 @@ createConnection().then(async connection => {
 				}, function(err) {
 					res.json(require('./helpers/UnauthorizedResponse'));
 				});				
-			}
+			}else
+            {
+                const result = (new (route.controller as any))[route.action](req, res, next);
+                if (result instanceof Promise) {
+                    result.then(result => result !== null && result !== undefined ? res.json(result) : undefined).catch(e => res.json(require('./helpers/UnauthorizedResponse')));
+                } else if (result !== null && result !== undefined) {
+                    res.json(result);
+                }
+            }
         });
     });
 

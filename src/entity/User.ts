@@ -63,7 +63,7 @@ export class User {
 	//CreateToken
 	CreateToken(request: Request){
 		var remoteIp = request.connection.remoteAddress;
-		return  Md5.init(this.username+remoteIp);
+		return  Md5.init(this.username+remoteIp+"super-salty-string-3xcc22dl2dkx2");
 	}
 
 }
