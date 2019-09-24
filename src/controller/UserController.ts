@@ -11,7 +11,12 @@ export class UserController {
 
     async profile(request: Request, response: Response, next: NextFunction) {              
         try{
-            let result = await this.userRepository.find();
+            let hUsername = request.header('username');
+            let hToken = request.header(require('../app_config').appTokenName);
+            let result = await this.userRepository.findOne({
+                username: hUsername,
+                session_token: hToken
+            });
             return result;
         }catch(e){
             return e;
