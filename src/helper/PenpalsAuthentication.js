@@ -11,6 +11,7 @@ exports.checkAuth = async function (request,userRepository) {
 	let hToken = request.header(require('../app_config').appTokenName);
 	let hIp = request.connection.remoteAddress;
 	let controlToken = Hasher.Md5.init(hUsername+hIp+AppConfig.appTokenSalt);
+	
 	 console.log('CHECK-AUTH');
 
 	  //controllo formale
@@ -18,11 +19,10 @@ exports.checkAuth = async function (request,userRepository) {
 		//hToken formalmente non valido
 		  console.log('MALFORMED-TOKEN');
 		//azzero il token per sicurezza
-		var userToUpdate = await userRepository.findByUsername(hUsername).then(function(userToUpdate){
-			userToUpdate.session_token = null;
-			userToUpdate.session_create_time = null;
-			userRepository.save(userToUpdate).then(user => console.log(user));
-			console.log('saved');
+		userRepository.findByUsername(hUsername).then(function(userToUpdate){	
+			if(userToUpdate !== undefined){
+				var updatedUser = userRepository.deleteAuthToken(userToUpdate);
+			}
 		}, function(err) {
 			console.log(err);
 		});		

@@ -6,17 +6,15 @@ import {Md5} from "md5-typescript";
 var PenpalsDateUtils = require('../helper/PenpalsDateUtils');
 var AppConfig = require('../app_config');
 
-@EntityRepository(User)
-export class UserRepository extends Repository<User> {
+@EntityRepository(ContactRequest)
+export class ContactRequestRepository extends Repository<ContactRequest> {
 
-    findByUsername(usernameToSearch: string) {
-        return this.findOne({ username: usernameToSearch });
+    findByUser(usernameToSearch: string) {
+        //return this.findOne({ username: usernameToSearch });
     }
 	
-	deleteAuthToken(user:User){
-		user.session_token = null;
-		user.session_create_time = null;
-		return this.save(user);
+	createRequest(user:User, requestText:string){
+		
 	}
     
     
