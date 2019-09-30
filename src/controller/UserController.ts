@@ -13,10 +13,18 @@ export class UserController {
         try{
             let hUsername = request.header('username');
             let hToken = request.header(require('../app_config').appTokenName);
-            let result = await this.userRepository.findOne({
-                username: hUsername,
-                session_token: hToken
+            
+            
+             let result = await this.userRepository.findOne({
+                where: {username: hUsername, session_token: hToken},
+                join: {
+                    alias: "user",
+                    leftJoinAndSelect: {
+                        contactRequests: "user.contactRequests"
+                    }
+                }
             });
+            
             return result;
         }catch(e){
             return e;
