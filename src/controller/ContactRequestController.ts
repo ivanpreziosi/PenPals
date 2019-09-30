@@ -2,9 +2,11 @@ import {getCustomRepository, getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {User} from "../entity/User";
 import {ContactRequest} from "../entity/ContactRequest";
-import {UserRepository} from "../repository/UserRepository"
+import {UserRepository} from "../repository/UserRepository";
+import {MoreThanOrEqual} from "typeorm";
 var DefaultResponse = require('../tpl/DefaultResponse');
 var AppConfig = require('../app_config');
+var DateHelper = require('../helper/PenpalsDateUtils');
 var DateHelper = require('../helper/PenpalsDateUtils');
 
 export class ContactRequestController {
@@ -12,7 +14,25 @@ export class ContactRequestController {
     private userRepository = getCustomRepository(UserRepository);
     private contactRequestRepository = getRepository(ContactRequest);
 
-    
+    /**
+    // get my requests GET
+    **/
+    async mine(request: Request, response: Response, next: NextFunction) {       
+        try{
+            //get current user 
+            let hUsername = request.header('username');
+            let hToken = request.header(require('../app_config').appTokenName);            
+            const loggedUser = await this.userRepository.findByHeaderAuth(hUsername,hToken);
+
+            //get requests
+            const result = await this.contactRequestRepository.find({where: { user:  loggedUser, request_create_time: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString())} })
+
+            return result;
+        }catch(e){
+            return e;
+        }
+        
+    }
     
     /**
     // Save ContactRequest POST

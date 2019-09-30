@@ -33,5 +33,12 @@ export const Routes = [
     controller: ContactRequestController,
     action: "save",
     isPublic: false
+},
+{
+    method: "get",
+    route: "/"+AppConfig.version+"/reqs",
+    controller: ContactRequestController,
+    action: "mine",
+    isPublic: false
 }
 ];

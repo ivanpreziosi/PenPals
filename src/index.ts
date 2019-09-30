@@ -32,14 +32,17 @@ createConnection().then(async connection => {
 				let userRepository = getCustomRepository(UserRepository);
 				var Auth = require('./helper/PenpalsAuthentication');
 				const authResult = Auth.checkAuth(req,userRepository); 
+				
 				authResult.then(function(ar) {
+					console.log(authResult);
 					const result = (new (route.controller as any))[route.action](req, res, next);
 					if (result instanceof Promise) {
-						result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./tpl/UnauthorizedResponse'))).catch(e => res.json(require('./tpl/UnauthorizedResponse')));
+						result.then(result => result !== null && result !== undefined ? res.json(result) : res.json({"responseData":{"status":"KO","code":"ROUTE-ERROR","message":"Routing error 1:"+route.controller+"-"+route.action}})).catch(e => res.json({"responseData":{"status":"KO","code":"ROUTE-ERROR","message":"Routing error 2"}}));
 					} else if (result !== null && result !== undefined) {
 						res.json(result);
 					}
 				}, function(err) {
+					console.log(authResult);
 					res.json(require('./tpl/UnauthorizedResponse'));
 				});				
 			}else
