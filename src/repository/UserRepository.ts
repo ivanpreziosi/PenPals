@@ -12,6 +12,8 @@ export class UserRepository extends Repository<User> {
         return this.findOne({ username: usernameToSearch });
     }
     
-    
+    findByHeaderAuth(usernameToSearch: string, tokenToSearch: string) {
+        return this.findOne({ username: usernameToSearch, session_token:tokenToSearch });
+    }
 
 }

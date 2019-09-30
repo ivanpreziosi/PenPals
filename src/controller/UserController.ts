@@ -4,6 +4,7 @@ import {User} from "../entity/User";
 import {Md5} from "md5-typescript";
 var DefaultResponse = require('../tpl/DefaultResponse');
 var AppConfig = require('../app_config');
+var DateHelper = require('../helper/PenpalsDateUtils');
 
 export class UserController {
 
@@ -14,16 +15,19 @@ export class UserController {
             let hUsername = request.header('username');
             let hToken = request.header(require('../app_config').appTokenName);
             
+            const result = await this.userRepository.createQueryBuilder("User")
+            .leftJoinAndSelect("User.contactRequests", "req","req.request_create_time > '"+DateHelper.getRequestExpirationDate().toString()+"'")
+            .getOne();
             
-             let result = await this.userRepository.findOne({
-                where: {username: hUsername, session_token: hToken},
-                join: {
-                    alias: "user",
-                    leftJoinAndSelect: {
-                        contactRequests: "user.contactRequests"
-                    }
-                }
-            });
+            // let result = await this.userRepository.findOne({
+                // where: {username: hUsername, session_token: hToken},
+                // join: {
+                    // alias: "user",
+                    // leftJoinAndSelect: {
+                        // contactRequests: "user.contactRequests"
+                    // }
+                // }
+            // });
             
             return result;
         }catch(e){
