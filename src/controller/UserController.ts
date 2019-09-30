@@ -11,6 +11,13 @@ export class UserController {
 
     private userRepository = getRepository(User);
 
+    /****************************
+    // USER RESOURCES ***********
+    ****************************/
+	
+	/**
+    // retrieve user profile GET
+    **/
     async profile(request: Request, response: Response, next: NextFunction) {              
         try{
             let hUsername = request.header('username');
@@ -35,14 +42,6 @@ export class UserController {
             return e;
         }
         
-    }
-
-    async one(request: Request, response: Response, next: NextFunction) {
-        DefaultResponse.responseData.status = "KO";
-        DefaultResponse.responseData.code = "FORBIDDEN";
-        DefaultResponse.responseData.message = "This is not available.";
-        response.set('status',403);
-        return DefaultResponse.responseData;
     }
     
     /**
@@ -105,12 +104,10 @@ export class UserController {
         return DefaultResponse.responseData;
         
     }
-
-    async remove(request: Request, response: Response, next: NextFunction) {
-        //let userToRemove = await this.userRepository.findOne(request.params.id);
-        //await this.userRepository.remove(userToRemove);
-    }
     
+	/**
+    // login user GET
+    **/
     async login(request: Request, response: Response, next: NextFunction) {
         // VALIDATE DATA
 		const Joi = require('@hapi/joi');
