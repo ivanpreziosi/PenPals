@@ -36,9 +36,16 @@ export const Routes = [
 },
 {
     method: "get",
-    route: "/"+AppConfig.version+"/reqs",
+    route: "/"+AppConfig.version+"/reqs/mine",
     controller: ContactRequestController,
     action: "mine",
+    isPublic: false
+},
+{
+    method: "get",
+    route: "/"+AppConfig.version+"/reqs/all",
+    controller: ContactRequestController,
+    action: "all",
     isPublic: false
 }
 ];
