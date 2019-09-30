@@ -1,4 +1,5 @@
 import {UserController} from "./controller/UserController";
+import {ContactRequestController} from "./controller/ContactRequestController";
 
 var AppConfig = require('./app_config');
 
@@ -11,13 +12,6 @@ export const Routes = [
     isPublic: false
 }, 
 {
-    method: "get",
-    route: "/"+AppConfig.version+"/users/:id",
-    controller: UserController,
-    action: "one",
-    isPublic: true
-}, 
-{
     method: "post",
     route: "/"+AppConfig.version+"/users",
     controller: UserController,
@@ -25,17 +19,19 @@ export const Routes = [
     isPublic: true
 }, 
 {
-    method: "delete",
-    route: "/"+AppConfig.version+"/users/:id",
-    controller: UserController,
-    action: "remove",
-    isPublic: false
-}, 
-{
     method: "post",
     route: "/"+AppConfig.version+"/login",
     controller: UserController,
     action: "login",
     isPublic: true
+}, 
+
+/** CONTACT REQUESTS **/
+{
+    method: "post",
+    route: "/"+AppConfig.version+"/reqs",
+    controller: ContactRequestController,
+    action: "save",
+    isPublic: false
 }
 ];
