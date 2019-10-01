@@ -1,15 +1,15 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from "typeorm";
-import {Request} from "express";
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany} from "typeorm";
 import {User} from "./User";
-import {Md5} from "md5-typescript";
-var PenpalsDateUtils = require('../helper/PenpalsDateUtils');
-var AppConfig = require('../app_config');
+import {ContactResponse} from "./ContactResponse";
 
 @Entity()
 export class ContactRequest {
 
     @PrimaryGeneratedColumn()
-    id: number;
+	id: number;
+	
+	@OneToMany(type => ContactResponse, contactResponse => contactResponse.contactRequest)
+    contactResponses: ContactResponse[];
 
     @ManyToOne(type => User, user => user.contactRequests)
     user: User;

@@ -1,6 +1,7 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
 import {Request} from "express";
 import {ContactRequest} from "./ContactRequest";
+import {ContactResponse} from "./ContactResponse";
 import {Md5} from "md5-typescript";
 var PenpalsDateUtils = require('../helper/PenpalsDateUtils');
 var AppConfig = require('../app_config');
@@ -12,7 +13,10 @@ export class User {
     id: number;
 	
 	@OneToMany(type => ContactRequest, contactRequest => contactRequest.user)
-    contactRequests: ContactRequest[];
+	contactRequests: ContactRequest[];
+	
+	@OneToMany(type => ContactResponse, contactResponse => contactResponse.user)
+    contactResponses: ContactResponse[];
 
     @Column({
 		type: "varchar",
