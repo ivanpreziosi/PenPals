@@ -5,3 +5,4 @@ build/
 tmp/
 temp/
 /database_schema.mwb.bak
+*.code-workspace
