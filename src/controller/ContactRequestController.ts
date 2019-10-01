@@ -156,9 +156,6 @@ export class ContactRequestController {
             response.set('status', 418);
         }
         return DefaultResponse.responseData;
-
-
-
     }
 
 

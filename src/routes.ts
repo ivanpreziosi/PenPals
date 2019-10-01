@@ -72,6 +72,13 @@ export const Routes = [
         controller: ContactResponseController,
         action: "request",
         isPublic: false
+    },
+    { //save request
+        method: "post",
+        route: "/" + AppConfig.version + "/resp",
+        controller: ContactResponseController,
+        action: "save",
+        isPublic: false
     }
 
 ];
