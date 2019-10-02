@@ -23,12 +23,9 @@ export class UserRepository extends Repository<User> {
 
     checkTokenExpiration(user: User) {
         var moment = require('moment');
-        console.log("checkTokenExpirationz");
-        console.log(user.session_create_time);
-        var tokenDate = moment(user.session_create_time).format('YYYY-MM-DD HH:mm:ss');
-        console.log("tokenDate:" + tokenDate);
+        var tokenDate = moment(user.session_create_time).format(AppConfig.dbDateFormat);
         var expirationdate = PenpalsDateUtils.getTokenExpirationDate();
-        console.log("expirationdate:" + expirationdate);
+
         if (tokenDate < expirationdate) {
             console.log("token expired!");
             return false;
