@@ -71,41 +71,18 @@ export class ContactResponseController {
         }
 
         try {
-            const contactRequest = this.contactRequestRepository.findOne(request.body.request_id);
-            contactRequest.then(
-                async function successHandler(contactRequest) {
-                    //create contactResponse model        
-                    let contactResponse = new ContactResponse();
-                    contactResponse.user = loggedUser;
-                    contactResponse.contactRequest = contactRequest;
-                    contactResponse.response_text = request.body.response_text;
+            const contactRequest = await this.contactRequestRepository.findOne(request.body.request_id);
 
-                    //save model          
-                    try {
-                        const result = await getRepository(ContactResponse).save(contactResponse);
-                        console.log(result);
-                        DefaultResponse.responseData.status = "OK";
-                        DefaultResponse.responseData.code = "CONTACT-REQUEST-SAVED";
-                        DefaultResponse.responseData.message = "User saved successfully.";
-                        return DefaultResponse.responseData;
-                    } catch (e) {
-                        console.log(e);
-                        DefaultResponse.responseData.status = "KO";
-                        DefaultResponse.responseData.code = e.code;
-                        DefaultResponse.responseData.message = e.message;
-                        response.set('status', 418);
-                        return DefaultResponse.responseData;
-                    }
+            let contactResponse = new ContactResponse();
+            contactResponse.user = loggedUser;
+            contactResponse.response_text = request.body.response_text;
+            contactResponse.contactRequest = contactRequest;
+            const result = await this.contactResponseRepository.save(contactResponse);
 
-                },
-                function failureHandler(e) {
-                    console.log(e);
-                    DefaultResponse.responseData.status = "KO";
-                    DefaultResponse.responseData.code = e.code;
-                    DefaultResponse.responseData.message = e.message;
-                    response.set('status', 418);
-                    return DefaultResponse.responseData;
-                });
+
+            DefaultResponse.responseData.status = "OK";
+            DefaultResponse.responseData.code = "CONTACT-RESPONSE-SAVED";
+            DefaultResponse.responseData.message = "Contact response saved successfully.";
         } catch (e) {
             console.log(e);
             DefaultResponse.responseData.status = "KO";
@@ -115,7 +92,7 @@ export class ContactResponseController {
             return DefaultResponse.responseData;
         }
 
-
+        return DefaultResponse.responseData;
     }
 
 }
