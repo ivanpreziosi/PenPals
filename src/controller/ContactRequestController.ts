@@ -19,9 +19,8 @@ export class ContactRequestController {
         try {
             //get current user 
             let hUsername = request.header('username');
-            let hToken = request.header(require('../app_config').appTokenName);
-            const loggedUser = await this.userRepository.findByHeaderAuth(hUsername, hToken);
-
+            const loggedUser = await this.userRepository.findByUsername(hUsername);
+            console.log(loggedUser);
             //get requests
             const result = await this.contactRequestRepository.find({ where: { user: loggedUser, request_create_time: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString()) } });
 
@@ -63,7 +62,7 @@ export class ContactRequestController {
             //get current user 
             let hUsername = request.header('username');
             let hToken = request.header(require('../app_config').appTokenName);
-            const loggedUser = await this.userRepository.findByHeaderAuth(hUsername, hToken);
+            const loggedUser = await this.userRepository.findByUsername(hUsername);
 
             //get requests
             const result = await this.contactRequestRepository.find({
@@ -113,7 +112,7 @@ export class ContactRequestController {
         let hUsername = request.header('username');
         let hToken = request.header(require('../app_config').appTokenName);
 
-        const loggedUser = await this.userRepository.findByHeaderAuth(hUsername, hToken);
+        const loggedUser = await this.userRepository.findByUsername(hUsername);
 
 
         // VALIDATE DATA

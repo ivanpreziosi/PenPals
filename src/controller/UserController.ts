@@ -93,7 +93,7 @@ export class UserController {
             DefaultResponse.responseData.code = "USER-SAVED";
             DefaultResponse.responseData.message = "User saved successfully.";
             response.set('status',201);
-            response.set(AppConfig.appTokenName,user.session_token);
+            //response.set(AppConfig.appTokenName,user.session_token);
         }catch(e){
             console.log(e);
             DefaultResponse.responseData.status = "KO";

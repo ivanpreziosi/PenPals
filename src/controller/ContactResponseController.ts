@@ -44,7 +44,7 @@ export class ContactResponseController {
         let hUsername = request.header('username');
         let hToken = request.header(require('../app_config').appTokenName);
 
-        const loggedUser = await this.userRepository.findByHeaderAuth(hUsername, hToken);
+        const loggedUser = await this.userRepository.findByUsername(hUsername);
 
 
         // VALIDATE DATA

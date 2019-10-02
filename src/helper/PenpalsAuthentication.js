@@ -1,54 +1,39 @@
 
-exports.checkAuth = async function (request,userRepository) {
-	
-	const Hasher = require("md5-typescript");
-	const Repository = require("typeorm");
-	const User= require("../entity/User");
-	var userRepository = userRepository;	  
-	var AppConfig = require('../app_config');
-	  
+exports.checkAuth = async function (request, userRepository) {
+
+	const User = require("../entity/User");
+	var userRepository = userRepository;
+
 	let hUsername = request.header('username');
 	let hToken = request.header(require('../app_config').appTokenName);
-	let hIp = request.connection.remoteAddress;
-	let controlToken = Hasher.Md5.init(hUsername+hIp+AppConfig.appTokenSalt);
-	
-	 console.log('CHECK-AUTH');
 
-	  //controllo formale
-	  if(hToken == '' || hToken !== controlToken){
+	var userToCheck = await userRepository.findOne({
+		select: ['username','id','session_token'],
+		where: {username: hUsername}
+	});
+	console.log(userToCheck);
+	var controlToken = userToCheck.CreateControlToken();
+	console.log('CHECK-AUTH');
+
+	//controllo formale
+	if (hToken == '' || hToken !== controlToken) {
 		//hToken formalmente non valido
-		  console.log('MALFORMED-TOKEN');
+		console.log('MALFORMED-TOKEN: ht' + hToken + "  ct" + controlToken);
 		//azzero il token per sicurezza
-		userRepository.findByUsername(hUsername).then(function(userToUpdate){	
-			if(userToUpdate !== undefined){
+		userRepository.findByUsername(hUsername).then(function (userToUpdate) {
+			if (userToUpdate !== undefined) {
 				var updatedUser = userRepository.deleteAuthToken(userToUpdate);
 			}
-		}, function(err) {
+		}, function (err) {
 			console.log(err);
-		});		
-	  
-	  	throw new Error("Token formally invalid");
-	  }
+		});
 
-	  //controllo record
-	  var result = await userRepository.find({
-			username: hUsername,
-			session_token: controlToken
-	  });
-	  
-	  //controllo scadenza token
+		throw new Error("Token formally invalid");
+	}
 
-	  if(result.length != 1){
-	  	//non esiste questo utente		
-	  	throw new Error("Non existent user");
-	  }
-		
-	  var authResult = JSON.stringify(result[0]);
-	  //console.log(authResult);
-	  return authResult;
-		
-
-
+	//controllo scadenza
+	return '{}';
+	
 };
 
 exports.unauthorizedResponse = require('../tpl/UnauthorizedResponse');

@@ -62,7 +62,7 @@ export class User {
 	
 	//VALIDATES TOKEN
 	ValidateToken(request: Request){
-		var controlToken = this.CreateToken(request);
+		var controlToken = this.CreateControlToken(request);
 		if(controlToken !== this.session_token){
 			return false;
 		};
@@ -71,8 +71,15 @@ export class User {
 	
 	//CreateToken
 	CreateToken(request: Request){
-		var remoteIp = request.connection.remoteAddress;
-		return  Md5.init(this.username+remoteIp+AppConfig.appTokenSalt);
+		return  Md5.init(this.username+this.password+PenpalsDateUtils.getUnixTimestampNow()+AppConfig.appTokenSalt);
+	}
+
+	CreateControlToken(request: Request){
+		console.log("creating ControlToken");
+		console.log("username: "+this.username);
+		console.log("session_token: "+this.session_token);
+		console.log("control token: "+Md5.init(this.username+this.session_token));
+		return Md5.init(this.username+this.session_token);
 	}
 	
 	
