@@ -8,7 +8,7 @@ exports.checkAuth = async function (request, userRepository) {
 	let hToken = request.header(require('../app_config').appTokenName);
 
 	var userToCheck = await userRepository.findOne({
-		select: ['username','id','session_token'],
+		select: ['username','id','session_token','session_create_time'],
 		where: {username: hUsername}
 	});
 	console.log(userToCheck);
@@ -16,6 +16,7 @@ exports.checkAuth = async function (request, userRepository) {
 	console.log('CHECK-AUTH');
 
 	//controllo formale
+	console.log('formal-check');
 	if (hToken == '' || hToken !== controlToken) {
 		//hToken formalmente non valido
 		console.log('MALFORMED-TOKEN: ht' + hToken + "  ct" + controlToken);
@@ -32,6 +33,21 @@ exports.checkAuth = async function (request, userRepository) {
 	}
 
 	//controllo scadenza
+	console.log('expiration-check');
+	if(!userRepository.checkTokenExpiration(userToCheck)){
+		console.log('EXPIRED-TOKEN');
+		//azzero il token per sicurezza
+		userRepository.findByUsername(hUsername).then(function (userToUpdate) {
+			if (userToUpdate !== undefined) {
+				var updatedUser = userRepository.deleteAuthToken(userToUpdate);
+			}
+		}, function (err) {
+			console.log(err);
+		});
+
+		throw new Error("Token expired!");
+	}
+
 	return '{}';
 	
 };

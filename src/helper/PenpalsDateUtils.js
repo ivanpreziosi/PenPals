@@ -1,17 +1,21 @@
 
+
 exports.getUnixTimestampNow = function () {
-  return Date.now() / 1000 | 0;
+  var moment = require('moment');
+  return moment().format('X');
 };
 
 exports.getMysqlDateNow = function () {
-    var d = new Date();    
-    var datestring = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2) + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
-    return datestring;
+  var moment = require('moment');
+  return moment().format('YYYY-MM-DD HH:mm:ss');
 };
 
 exports.getRequestExpirationDate = function () {
-    var d = new Date();    
-    d.setDate(d.getDate() - 1);
-    var datestring = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2) + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
-    return datestring;
+  var moment = require('moment');
+  return moment().subtract(1, 'day').format('YYYY-MM-DD HH:mm:ss');
+};
+
+exports.getTokenExpirationDate = function () {
+  var moment = require('moment');
+  return moment().subtract(20, 'minutes').format('YYYY-MM-DD HH:mm:ss');
 };
