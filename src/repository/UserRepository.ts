@@ -34,6 +34,8 @@ export class UserRepository extends Repository<User> {
             return false;
         } else {
             console.log("token still valid!");
+            user.session_create_time = PenpalsDateUtils.getMysqlDateNow();
+            this.save(user);
             return true;
         }
     }
