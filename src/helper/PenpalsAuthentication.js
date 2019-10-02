@@ -48,6 +48,7 @@ exports.checkAuth = async function (request, userRepository) {
 		throw new Error("Token expired!");
 	}
 
+
 	return '{}';
 	
 };
