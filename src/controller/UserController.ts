@@ -28,6 +28,8 @@ export class UserController {
             let hToken = request.header(require('../app_config').appTokenName);
 
             const user = await this.userRepository.findByUsername(hUsername);
+
+            //requests
             const deliveredRequests = await this.contactRequestRepository.createQueryBuilder('request')
                 .select("request.id")
                 .innerJoin(
@@ -48,6 +50,9 @@ export class UserController {
                     is_active: 1,
                     request_create_time: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString())
                 }).getMany();
+
+
+            //responses
 
 
             return {

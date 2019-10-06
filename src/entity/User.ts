@@ -17,6 +17,9 @@ export class User {
 	
 	@OneToMany(type => ContactResponse, contactResponse => contactResponse.user)
 	contactResponses: ContactResponse[];
+
+	@OneToMany(type => ContactResponse, contactResponse => contactResponse.recipient)
+	recipientResponses: ContactResponse[];
 	
 	@ManyToMany(type => ContactRequest, contactRequest => contactRequest.users_delivered)
     ViewedRequests: ContactRequest[];

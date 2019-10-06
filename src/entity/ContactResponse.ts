@@ -18,6 +18,11 @@ export class ContactResponse {
     })
     user: User;
 
+    @ManyToOne(type => User, user => user.recipientResponses, {
+        nullable: false
+    })
+    recipient: User;
+
     @Column({
         type: "text",
     })
