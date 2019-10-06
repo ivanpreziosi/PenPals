@@ -1,5 +1,6 @@
 exports.responseData = {
 	status: '',
 	code: '',
-	message: ''
+	message: '',
+	payload: ''
 };

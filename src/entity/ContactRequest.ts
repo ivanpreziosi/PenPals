@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, ManyToMany, JoinTable} from "typeorm";
 import {User} from "./User";
 import {ContactResponse} from "./ContactResponse";
 
@@ -9,7 +9,12 @@ export class ContactRequest {
 	id: number;
 	
 	@OneToMany(type => ContactResponse, contactResponse => contactResponse.contactRequest)
-    contactResponses: ContactResponse[];
+	contactResponses: ContactResponse[];
+	
+	
+	@ManyToMany(type => User)
+    @JoinTable()
+    users_delivered: User[];
 
     @ManyToOne(type => User, user => user.contactRequests)
     user: User;
@@ -29,7 +34,7 @@ export class ContactRequest {
 		nullable: false,
 		default: '1'
 	})
-    is_active: number;
+	is_active: number;
 
 	
 }

@@ -35,5 +35,12 @@ export class ContactResponse {
     })
     is_active: number;
 
+    @Column({
+        type: "tinyint",
+        nullable: false,
+        default: '0'
+    })
+    is_delivered: number;
+
 
 }

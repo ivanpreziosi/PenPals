@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany} from "typeorm";
 import {Request} from "express";
 import {ContactRequest} from "./ContactRequest";
 import {ContactResponse} from "./ContactResponse";
@@ -16,7 +16,10 @@ export class User {
 	contactRequests: ContactRequest[];
 	
 	@OneToMany(type => ContactResponse, contactResponse => contactResponse.user)
-    contactResponses: ContactResponse[];
+	contactResponses: ContactResponse[];
+	
+	@ManyToMany(type => ContactRequest, contactRequest => contactRequest.users_delivered)
+    ViewedRequests: ContactRequest[];
 
     @Column({
 		type: "varchar",
