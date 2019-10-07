@@ -2,6 +2,7 @@ import { getRepository } from "typeorm";
 import { NextFunction, Request, Response } from "express";
 import { User } from "../entity/User";
 import { ContactRequest } from "../entity/ContactRequest";
+import { ContactResponse } from "../entity/ContactResponse";
 import { Md5 } from "md5-typescript";
 var DefaultResponse = require('../tpl/DefaultResponse');
 var AppConfig = require('../app_config');
@@ -14,6 +15,7 @@ export class UserController {
 
     private userRepository = getCustomRepository(UserRepository);
     private contactRequestRepository = getRepository(ContactRequest);
+    private contactResponseRepository = getRepository(ContactResponse);
 
     /****************************
     // USER RESOURCES ***********
@@ -64,6 +66,9 @@ export class UserController {
 
 
             //responses
+            const undeliveredReponses = await this.contactResponseRepository.createQueryBuilder('response')
+                .select("response.id")
+                .where("response.userId = '"+user.id+"' AND response.isActive = '1' AND response.isDelivered = '0'").getMany();
 
 
             return {
@@ -71,7 +76,8 @@ export class UserController {
                 code: "DASHBOARD-INFO",
                 message: "Dashboard info succesfully obtained.",
                 user: user,
-                newRequests: undeliveredRequests
+                newRequests: undeliveredRequests,
+                undeliveredReponses: undeliveredReponses
             };
         } catch (e) {
             return {
