@@ -26,26 +26,26 @@ export class ContactResponse {
     @Column({
         type: "text",
     })
-    response_text: string;
+    responseText: string;
 
     @Column({
         type: "timestamp",
     })
-    response_create_time: number;
+    resposeCreateTime: number;
 
     @Column({
         type: "tinyint",
         nullable: false,
         default: '1'
     })
-    is_active: number;
+    isActive: number;
 
     @Column({
         type: "tinyint",
         nullable: false,
         default: '0'
     })
-    is_delivered: number;
+    isDelivered: number;
 
 
 }

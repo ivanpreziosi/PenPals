@@ -8,7 +8,7 @@ exports.checkAuth = async function (request, userRepository) {
 	let hToken = request.header(require('../app_config').appTokenName);
 
 	var userToCheck = await userRepository.findOne({
-		select: ['username','id','session_token','session_create_time'],
+		select: ['username','id','sessionToken','sessionCreateTime'],
 		where: {username: hUsername}
 	});
 	console.log(userToCheck);

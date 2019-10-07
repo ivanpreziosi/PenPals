@@ -21,7 +21,7 @@ export class User {
 	@OneToMany(type => ContactResponse, contactResponse => contactResponse.recipient)
 	recipientResponses: ContactResponse[];
 	
-	@ManyToMany(type => ContactRequest, contactRequest => contactRequest.users_delivered)
+	@ManyToMany(type => ContactRequest, contactRequest => contactRequest.usersDelivered)
     ViewedRequests: ContactRequest[];
 
     @Column({
@@ -42,7 +42,7 @@ export class User {
 		type: "timestamp",
 		select: false
 	})
-    user_create_time: number;
+    userCreateTime: number;
 	
 	@Column({
 		type: "varchar",
@@ -50,26 +50,26 @@ export class User {
 		nullable: true,
 		select: false
 	})
-    session_token: string;
+    sessionToken: string;
 	
 	@Column({
 		type: "timestamp",
 		nullable: true,
 		select: false
 	})
-    session_create_time: number;
+    sessionCreateTime: number;
 
 	//SETS A NEW A TOKEN
 	SetToken(request: Request){
 		let userTimestamp = PenpalsDateUtils.getMysqlDateNow();
-		this.session_token = this.CreateToken(request);
-        this.session_create_time = userTimestamp;
+		this.sessionToken = this.CreateToken(request);
+        this.sessionCreateTime = userTimestamp;
 	}
 	
 	//VALIDATES TOKEN
 	ValidateToken(request: Request){
 		var controlToken = this.CreateControlToken(request);
-		if(controlToken !== this.session_token){
+		if(controlToken !== this.sessionToken){
 			return false;
 		};
 		return true;		
@@ -83,9 +83,9 @@ export class User {
 	CreateControlToken(request: Request){
 		console.log("creating ControlToken");
 		console.log("username: "+this.username);
-		console.log("session_token: "+this.session_token);
-		console.log("control token: "+Md5.init(this.username+this.session_token));
-		return Md5.init(this.username+this.session_token);
+		console.log("session_token: "+this.sessionToken);
+		console.log("control token: "+Md5.init(this.username+this.sessionToken));
+		return Md5.init(this.username+this.sessionToken);
 	}
 	
 	

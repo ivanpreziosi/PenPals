@@ -33,11 +33,11 @@ export class UserController {
             const deliveredRequests = await this.contactRequestRepository.createQueryBuilder('request')
                 .select("request.id")
                 .innerJoin(
-                    'request.users_delivered',
+                    'request.usersDelivered',
                     'user',
                     '(user.username = :username)',
                     { username: user.username }
-                ).where("(request.is_active = '1' AND request.request_create_time >= '" + DateHelper.getRequestExpirationDate().toString() + "')").getMany();
+                ).where("(request.isActive = '1' AND request.requestCreateTime >= '" + DateHelper.getRequestExpirationDate().toString() + "')").getMany();
 
             var deliveredRequestsIds = new Array();
             deliveredRequests.forEach(req => {
@@ -180,7 +180,7 @@ export class UserController {
         //find user in db
         try {
             let result = await this.userRepository.find({
-                select: ['id', 'username', 'session_token'],
+                select: ['id', 'username', 'sessionToken'],
                 where: [
                     { username: request.body.username, password: Md5.init(request.body.password) }
                 ]
@@ -201,10 +201,10 @@ export class UserController {
             DefaultResponse.responseData.payload = {
                 id: user.id,
                 username: user.username,
-                authTokencontrolToken: Md5.init(user.username + user.session_token)
+                authTokencontrolToken: Md5.init(user.username + user.sessionToken)
             };
             response.set('status', 200);
-            response.set(AppConfig.appTokenName, user.session_token);
+            response.set(AppConfig.appTokenName, user.sessionToken);
         } catch (e) {
             console.log(e);
             DefaultResponse.responseData.status = "KO";

@@ -14,7 +14,7 @@ export class ContactRequest {
 	
 	@ManyToMany(type => User)
     @JoinTable()
-    users_delivered: User[];
+    usersDelivered: User[];
 
     @ManyToOne(type => User, user => user.contactRequests)
     user: User;
@@ -22,19 +22,19 @@ export class ContactRequest {
     @Column({
 		type: "text",
 	})
-    request_text: string;
+    requestText: string;
 	
 	@Column({
 		type: "timestamp",
 	})
-    request_create_time: number;
+    requestCreateTime: number;
 	
 	@Column({
 		type: "tinyint",
 		nullable: false,
 		default: '1'
 	})
-	is_active: number;
+	isActive: number;
 
 	
 }

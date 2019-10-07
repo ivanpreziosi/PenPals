@@ -138,7 +138,7 @@ export class ContactRequestController {
         //create model        
         let contactRequest = new ContactRequest();
         contactRequest.user = loggedUser;
-        contactRequest.request_text = request.body.request_text;
+        contactRequest.requestText = request.body.request_text;
 
         //save model          
         try {

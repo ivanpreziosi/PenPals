@@ -75,7 +75,7 @@ export class ContactResponseController {
 
             let contactResponse = new ContactResponse();
             contactResponse.user = loggedUser;
-            contactResponse.response_text = request.body.response_text;
+            contactResponse.responseText = request.body.response_text;
             contactResponse.contactRequest = contactRequest;
             const result = await this.contactResponseRepository.save(contactResponse);
 
