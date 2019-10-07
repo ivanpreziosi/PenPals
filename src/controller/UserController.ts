@@ -37,19 +37,30 @@ export class UserController {
                     'user',
                     '(user.username = :username)',
                     { username: user.username }
-                ).where("request.is_active = 1 AND request.request_create_time >='" + DateHelper.getRequestExpirationDate().toString() + "'").groupBy(request.id).getMany();
+                ).where("(request.is_active = '1' AND request.request_create_time >= '" + DateHelper.getRequestExpirationDate().toString() + "')").getMany();
 
             var deliveredRequestsIds = new Array();
             deliveredRequests.forEach(req => {
                 deliveredRequestsIds.push(req.id);
             });
 
-            const undeliveredRequests = await this.contactRequestRepository.createQueryBuilder('request')
-                .where({
+            var queryBuilderParams = null;
+
+            if(deliveredRequestsIds.length > 0){
+                queryBuilderParams = {
                     id: Not(In(deliveredRequestsIds)),
                     is_active: 1,
                     request_create_time: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString())
-                }).getMany();
+                };
+            }else{
+                queryBuilderParams = {
+                    is_active: 1,
+                    request_create_time: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString())
+                };
+            }
+
+            const undeliveredRequests = await this.contactRequestRepository.createQueryBuilder('request')
+                .where(queryBuilderParams).getMany();
 
 
             //responses
