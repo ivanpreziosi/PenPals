@@ -75,7 +75,12 @@ export class ContactRequestController {
                 where: { user: Not(loggedUser.id), requestCreateTime: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString()) }
             });
 
-            return result;
+            return {
+                status: "OK",
+                code: "GET-REQUESTS",
+                message: "Contact requests succesfully fetched",
+                payload: result
+            };
         } catch (e) {
             return e;
         }
