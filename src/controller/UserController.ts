@@ -48,13 +48,13 @@ export class UserController {
 
             var queryBuilderParams = null;
 
-            if(deliveredRequestsIds.length > 0){
+            if (deliveredRequestsIds.length > 0) {
                 queryBuilderParams = {
                     id: Not(In(deliveredRequestsIds)),
                     is_active: 1,
                     request_create_time: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString())
                 };
-            }else{
+            } else {
                 queryBuilderParams = {
                     is_active: 1,
                     request_create_time: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString())
@@ -68,7 +68,7 @@ export class UserController {
             //responses
             const undeliveredReponses = await this.contactResponseRepository.createQueryBuilder('response')
                 .select("response.id")
-                .where("response.userId = '"+user.id+"' AND response.isActive = '1' AND response.isDelivered = '0'").getMany();
+                .where("response.userId = '" + user.id + "' AND response.isActive = '1' AND response.isDelivered = '0'").getMany();
 
 
             return {
@@ -196,26 +196,28 @@ export class UserController {
                     code: "LOGIN-ERROR",
                     message: "Login unsuccesfull, check your credentials."
                 };
+            } else {
+                let user = result[0];
+                user.SetToken(request);
+                await this.userRepository.save(user);
+                console.log(user);
+                DefaultResponse.responseData.status = "OK";
+                DefaultResponse.responseData.code = "USER-LOGGED-IN";
+                DefaultResponse.responseData.message = "User logged in successfully.";
+                DefaultResponse.responseData.payload = {
+                    id: user.id,
+                    username: user.username,
+                    authTokencontrolToken: Md5.init(user.username + user.sessionToken)
+                };
+                response.set('status', 200);
+                response.set(AppConfig.appTokenName, user.sessionToken);
             }
-            let user = result[0];
-            user.SetToken(request);
-            await this.userRepository.save(user);
-            console.log(user);
-            DefaultResponse.responseData.status = "OK";
-            DefaultResponse.responseData.code = "USER-LOGGED-IN";
-            DefaultResponse.responseData.message = "User logged in successfully.";
-            DefaultResponse.responseData.payload = {
-                id: user.id,
-                username: user.username,
-                authTokencontrolToken: Md5.init(user.username + user.sessionToken)
-            };
-            response.set('status', 200);
-            response.set(AppConfig.appTokenName, user.sessionToken);
         } catch (e) {
             console.log(e);
             DefaultResponse.responseData.status = "KO";
             DefaultResponse.responseData.code = e.code;
             DefaultResponse.responseData.message = e.message;
+            DefaultResponse.responseData.payload = null;
             response.set('status', 418);
         }
 

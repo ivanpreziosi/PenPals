@@ -22,7 +22,7 @@ export class ContactRequestController {
             const loggedUser = await this.userRepository.findByUsername(hUsername);
             console.log(loggedUser);
             //get requests
-            const result = await this.contactRequestRepository.find({ where: { user: loggedUser, request_create_time: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString()) } });
+            const result = await this.contactRequestRepository.find({ where: { user: loggedUser, requestCreateTime: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString()) } });
 
             return result;
         } catch (e) {
@@ -72,7 +72,7 @@ export class ContactRequestController {
                         user: "req.user"
                     }
                 },
-                where: { user: Not(loggedUser.id), request_create_time: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString()) }
+                where: { user: Not(loggedUser.id), requestCreateTime: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString()) }
             });
 
             return result;
@@ -95,7 +95,7 @@ export class ContactRequestController {
                         user: "req.user"
                     }
                 },
-                where: { user: request.params.userId, request_create_time: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString()) }
+                where: { user: request.params.userId, requestCreateTime: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString()) }
             })
             return result;
         } catch (e) {
@@ -119,7 +119,7 @@ export class ContactRequestController {
         const Joi = require('@hapi/joi');
 
         const schema = Joi.object({
-            request_text: Joi.string()
+            requestText: Joi.string()
                 .required(),
         })
 
@@ -138,7 +138,7 @@ export class ContactRequestController {
         //create model        
         let contactRequest = new ContactRequest();
         contactRequest.user = loggedUser;
-        contactRequest.requestText = request.body.request_text;
+        contactRequest.requestText = request.body.requestText;
 
         //save model          
         try {
@@ -146,7 +146,7 @@ export class ContactRequestController {
             console.log(result);
             DefaultResponse.responseData.status = "OK";
             DefaultResponse.responseData.code = "CONTACT-REQUEST-SAVED";
-            DefaultResponse.responseData.message = "User saved successfully.";
+            DefaultResponse.responseData.message = "Request saved successfully.";
         } catch (e) {
             console.log(e);
             DefaultResponse.responseData.status = "KO";

@@ -12,18 +12,18 @@ export class UserRepository extends Repository<User> {
     }
 
     deleteAuthToken(user: User) {
-        user.session_token = null;
-        user.session_create_time = null;
+        user.sessionToken = null;
+        user.sessionCreateTime = null;
         return this.save(user);
     }
 
     findByHeaderAuth(usernameToSearch: string, tokenToSearch: string) {
-        return this.findOne({ username: usernameToSearch, session_token: tokenToSearch });
+        return this.findOne({ username: usernameToSearch, sessionToken: tokenToSearch });
     }
 
     checkTokenExpiration(user: User) {
         var moment = require('moment');
-        var tokenDate = moment(user.session_create_time).format(AppConfig.dbDateFormat);
+        var tokenDate = moment(user.sessionCreateTime).format(AppConfig.dbDateFormat);
         var expirationdate = PenpalsDateUtils.getTokenExpirationDate();
 
         if (tokenDate < expirationdate) {
@@ -31,7 +31,7 @@ export class UserRepository extends Repository<User> {
             return false;
         } else {
             console.log("token still valid!");
-            user.session_create_time = PenpalsDateUtils.getMysqlDateNow();
+            user.sessionCreateTime = PenpalsDateUtils.getMysqlDateNow();
             this.save(user);
             return true;
         }
