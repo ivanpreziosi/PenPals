@@ -51,9 +51,9 @@ export class ContactResponseController {
         const Joi = require('@hapi/joi');
 
         const schema = Joi.object({
-            response_text: Joi.string()
+            responseText: Joi.string()
                 .required(),
-            request_id: Joi.number()
+            requestId: Joi.number()
                 .integer()
                 .required()
         })
@@ -71,11 +71,11 @@ export class ContactResponseController {
         }
 
         try {
-            const contactRequest = await this.contactRequestRepository.findOne(request.body.request_id);
+            const contactRequest = await this.contactRequestRepository.findOne(request.body.requestId);
 
             let contactResponse = new ContactResponse();
             contactResponse.user = loggedUser;
-            contactResponse.responseText = request.body.response_text;
+            contactResponse.responseText = request.body.responseText;
             contactResponse.contactRequest = contactRequest;
             const result = await this.contactResponseRepository.save(contactResponse);
 
