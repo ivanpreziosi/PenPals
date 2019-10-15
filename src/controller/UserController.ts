@@ -31,44 +31,13 @@ export class UserController {
 
             const user = await this.userRepository.findByUsername(hUsername);
 
-            //requests
-            const deliveredRequests = await this.contactRequestRepository.createQueryBuilder('request')
-                .select("request.id")
-                .innerJoin(
-                    'request.usersDelivered',
-                    'user',
-                    '(user.username = :username)',
-                    { username: user.username }
-                ).where("(request.isActive = '1' AND request.requestCreateTime >= '" + DateHelper.getRequestExpirationDate().toString() + "')").getMany();
 
-            var deliveredRequestsIds = new Array();
-            deliveredRequests.forEach(req => {
-                deliveredRequestsIds.push(req.id);
-            });
-
-            var queryBuilderParams = null;
-
-            if (deliveredRequestsIds.length > 0) {
-                queryBuilderParams = {
-                    id: Not(In(deliveredRequestsIds)),
-                    is_active: 1,
-                    request_create_time: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString())
-                };
-            } else {
-                queryBuilderParams = {
-                    is_active: 1,
-                    request_create_time: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString())
-                };
-            }
-
-            const undeliveredRequests = await this.contactRequestRepository.createQueryBuilder('request')
-                .where(queryBuilderParams).getMany();
-
+            const undeliveredRequests = await this.userRepository.getUndeliveredRequests(user);
+            console.log(undeliveredRequests);
+            console.log("undeliveredRequests");
 
             //responses
-            const undeliveredReponses = await this.contactResponseRepository.createQueryBuilder('response')
-                .select("response.id")
-                .where("response.userId = '" + user.id + "' AND response.isActive = '1' AND response.isDelivered = '0'").getMany();
+            const undeliveredReponses = await this.userRepository.getUndeliveredResponses(user);
 
 
             return {
