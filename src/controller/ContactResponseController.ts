@@ -74,20 +74,28 @@ export class ContactResponseController {
         }
 
         try {
-            const contactRequest = await this.contactRequestRepository.findOne(request.body.requestId);
+            const contactRequest = await this.contactRequestRepository.findOne({
+                where: {
+                    id: request.body.requestId
+                },
+                relations: ["usersDelivered"]
+            });
             const recipientUser = await this.userRepository.findOne(parseInt(request.body.recipientId));
-            console.log("recipientUser");
-            console.log(recipientUser);
 
             let contactResponse = new ContactResponse();
             contactResponse.user = loggedUser;
             contactResponse.responseText = request.body.responseText;
             contactResponse.contactRequest = contactRequest;
             contactResponse.recipient = recipientUser;
-            console.log("contactResponse");
-            console.log(contactResponse);
             const result = await this.contactResponseRepository.save(contactResponse);
 
+            //set this request as delivered for this user
+            console.log("contactRequest.usersDelivered");
+            console.log(contactRequest.usersDelivered);
+            contactRequest.usersDelivered.push(recipientUser);
+            console.log(contactRequest.usersDelivered);
+            await this.contactRequestRepository.save(contactRequest);
+            ////////////////////////////////////////////////
 
             DefaultResponse.responseData.status = "OK";
             DefaultResponse.responseData.code = "CONTACT-RESPONSE-SAVED";
