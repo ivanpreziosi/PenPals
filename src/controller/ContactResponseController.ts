@@ -55,6 +55,9 @@ export class ContactResponseController {
                 .required(),
             requestId: Joi.number()
                 .integer()
+                .required(),
+            recipientId: Joi.number()
+                .integer()
                 .required()
         })
 
@@ -72,11 +75,17 @@ export class ContactResponseController {
 
         try {
             const contactRequest = await this.contactRequestRepository.findOne(request.body.requestId);
+            const recipientUser = await this.userRepository.findOne(parseInt(request.body.recipientId));
+            console.log("recipientUser");
+            console.log(recipientUser);
 
             let contactResponse = new ContactResponse();
             contactResponse.user = loggedUser;
             contactResponse.responseText = request.body.responseText;
             contactResponse.contactRequest = contactRequest;
+            contactResponse.recipient = recipientUser;
+            console.log("contactResponse");
+            console.log(contactResponse);
             const result = await this.contactResponseRepository.save(contactResponse);
 
 
