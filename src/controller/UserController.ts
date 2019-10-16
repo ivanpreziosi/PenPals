@@ -33,12 +33,10 @@ export class UserController {
 
 
             const undeliveredRequests = await this.userRepository.getUndeliveredRequests(user);
-            console.log(undeliveredRequests);
-            console.log("undeliveredRequests");
-
-            //responses
+            
             const undeliveredReponses = await this.userRepository.getUndeliveredResponses(user);
 
+            const unreadResponses = await this.userRepository.getUnreadResponses(user);
 
             return {
                 status: "OK",
@@ -46,7 +44,8 @@ export class UserController {
                 message: "Dashboard info succesfully obtained.",
                 user: user,
                 newRequests: undeliveredRequests,
-                undeliveredReponses: undeliveredReponses
+                undeliveredReponses: undeliveredReponses,
+                unreadResponses: unreadResponses
             };
         } catch (e) {
             return {

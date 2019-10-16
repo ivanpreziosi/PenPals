@@ -2,6 +2,7 @@ import { EntityRepository, Repository, getRepository, Not, In, MoreThanOrEqual }
 import { ContactRequest } from "../entity/ContactRequest";
 import { User } from "../entity/User";
 import { ContactResponse } from "../entity/ContactResponse";
+import { request } from "https";
 var PenpalsDateUtils = require('../helper/PenpalsDateUtils');
 var AppConfig = require('../app_config');
 var DateHelper = require('../helper/PenpalsDateUtils');
@@ -82,9 +83,28 @@ export class UserRepository extends Repository<User> {
 
     getUndeliveredResponses(user: User) {
         var contactResponseRepository = getRepository(ContactResponse);
-        return contactResponseRepository.createQueryBuilder('response')
-        .select("response.id")
-        .where("response.userId = '" + user.id + "' AND response.isActive = '1' AND response.isDelivered = '0' AND response.resposeCreateTime >= '" + DateHelper.getRequestExpirationDate().toString() + "'").getMany();
+
+        return contactResponseRepository.find({
+            select: ["id"],
+            where: {
+                user: user,
+                isActive: 1,
+                isDelivered: 0,
+                resposeCreateTime: DateHelper.getRequestExpirationDate().toString()
+            }
+        });
+
+        //return contactResponseRepository.createQueryBuilder('response')
+        //.select("response.id")
+        //.where("response.userId = '" + user.id + "' AND response.isActive = '1' AND response.isDelivered = '0' AND response.resposeCreateTime >= '" + DateHelper.getRequestExpirationDate().toString() + "'").getMany();
+    }
+
+    getUnreadResponses(user: User) {
+        var contactResponseRepository = getRepository(ContactResponse);
+        return contactResponseRepository.find({
+            relations:["contactRequest","user"],
+            where: { recipient: user, isActive: 1, isDelivered: 0 }
+        });
     }
 
 }
