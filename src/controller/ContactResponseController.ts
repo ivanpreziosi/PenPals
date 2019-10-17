@@ -72,16 +72,22 @@ export class ContactResponseController {
             response.set('status', 400);
             return DefaultResponse.responseData;
         }
+        /////////////////////////////////////////////////////////////////////////
 
+        
         try {
-            const contactRequest = await this.contactRequestRepository.findOne({
+            //load contact request
+            var contactRequest = await this.contactRequestRepository.findOne({
                 where: {
                     id: request.body.requestId
                 },
                 relations: ["usersDelivered"]
             });
+
+            // load recipient user
             const recipientUser = await this.userRepository.findOne(parseInt(request.body.recipientId));
 
+            //create contact response
             let contactResponse = new ContactResponse();
             contactResponse.user = loggedUser;
             contactResponse.responseText = request.body.responseText;
@@ -92,7 +98,10 @@ export class ContactResponseController {
             //set this request as delivered for this user
             console.log("contactRequest.usersDelivered");
             console.log(contactRequest.usersDelivered);
-            contactRequest.usersDelivered.push(recipientUser);
+            let usersDelivered = contactRequest.usersDelivered;
+            usersDelivered.push(loggedUser);
+            console.log(usersDelivered);
+            contactRequest.usersDelivered = usersDelivered;
             console.log(contactRequest.usersDelivered);
             await this.contactRequestRepository.save(contactRequest);
             ////////////////////////////////////////////////

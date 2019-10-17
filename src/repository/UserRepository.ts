@@ -52,33 +52,33 @@ export class UserRepository extends Repository<User> {
             ).where("(request.isActive = '1' AND request.requestCreateTime >= '" + DateHelper.getRequestExpirationDate().toString() + "')").getMany();
     }
 
-    async getUndeliveredRequests(user: User){
+    async getUndeliveredRequests(user: User) {
         var contactRequestRepository = getRepository(ContactRequest);
-
         var deliveredRequests = await this.getDeliveredRequests(user);
-        
 
         var deliveredRequestsIds = new Array();
         deliveredRequests.forEach(req => {
-                deliveredRequestsIds.push(req.id);
-            });
+            deliveredRequestsIds.push(req.id);
+        });
 
         var queryBuilderParams = null;
-            if (deliveredRequestsIds.length > 0) {
-                queryBuilderParams = {
-                    id: Not(In(deliveredRequestsIds)),
-                    isActive: 1,
-                    requestCreateTime: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString())
-                };
-            } else {
-                queryBuilderParams = {
-                    isActive: 1,
-                    requestCreateTime: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString())
-                };
-            }
-        const undeliveredRequests = await contactRequestRepository.createQueryBuilder('request').where(queryBuilderParams).getMany();
-
-        return undeliveredRequests;
+        if (deliveredRequestsIds.length > 0) {
+            queryBuilderParams = {
+                id: Not(In(deliveredRequestsIds)),
+                isActive: 1,
+                requestCreateTime: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString())
+            };
+        } else {
+            queryBuilderParams = {
+                isActive: 1,
+                requestCreateTime: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString())
+            };
+        }
+        
+        return contactRequestRepository.find({
+            relations:["user"],
+            where: queryBuilderParams
+        });
     }
 
     getUndeliveredResponses(user: User) {
@@ -102,7 +102,7 @@ export class UserRepository extends Repository<User> {
     getUnreadResponses(user: User) {
         var contactResponseRepository = getRepository(ContactResponse);
         return contactResponseRepository.find({
-            relations:["contactRequest","user"],
+            relations: ["contactRequest", "user"],
             where: { recipient: user, isActive: 1, isDelivered: 0 }
         });
     }

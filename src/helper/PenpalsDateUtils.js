@@ -1,6 +1,5 @@
-
-
 var AppConfig = require('../app_config');
+
 exports.getUnixTimestampNow = function () {
   var moment = require('moment');
   return moment().format('X');

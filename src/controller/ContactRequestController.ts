@@ -65,17 +65,7 @@ export class ContactRequestController {
             const loggedUser = await this.userRepository.findByUsername(hUsername);
 
             //get requests
-            const result = await this.contactRequestRepository.find({
-                join: {
-                    alias: "req",
-                    leftJoinAndSelect: {
-                        user: "req.user"
-                    }
-                },
-                where: { user: Not(loggedUser.id), requestCreateTime: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString()) }
-            });
-
-            
+            const result = await this.userRepository.getUndeliveredRequests(loggedUser);            
 
             return {
                 status: "OK",
