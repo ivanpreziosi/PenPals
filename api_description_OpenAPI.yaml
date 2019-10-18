@@ -64,7 +64,7 @@
       "post": {
         "tags": [],
         "summary": "Register new user to the server ",
-        "operationId": "Save a new user",
+        "operationId": "save_user",
         "parameters": [
           {
             "$ref": "#/components/parameters/username",
@@ -131,19 +131,18 @@
       }
     },
     "securitySchemes": {
-      "Token": {
+      "Token ": {
         "type": "http",
-        "description": "Token on login",
+        "description": "Token returned on login ",
         "name": "X-Pp-Token",
         "in": "header",
-        "scheme": "bearer"
-      },
-      "Username": {
-        "type": "http",
-        "description": "username to be provided along with token",
-        "name": "username",
-        "in": "header",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "flows": {
+          "implicit": {},
+          "password": {},
+          "clientCredentials": {},
+          "authorizationCode": {}
+        }
       }
     },
     "schemas": {},
@@ -152,9 +151,6 @@
   "security": [
     {
       "Token": []
-    },
-    {
-      "Username": []
     }
   ],
   "tags": [
