@@ -9,13 +9,13 @@ servers:
 - url: http://localhost:1312/V1
 paths:
 #
-#### LOGIN paths:
+#### LOGIN path:
 #
   /login:
     post:
       tags:
-      - Public
-      summary: Login endpoint
+      - User
+      summary: (PUBLIC) Login endpoint
       operationId: login
       requestBody:
         description: Login data
@@ -76,52 +76,35 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
 #
-#### /LOGIN paths:
+#### /LOGIN path:
 #
 #############################################################################
 #
 #### /LOGIN paths:
 #
-  /paramTestsPath/{integerParam}/{booleanParam}/{stringParam}/{doubleParam}:
+  /users:
     get:
       tags:
-      - pets
-      summary: This path is only for tests
-      operationId: paramTestsPath
+      - User
+      summary: Get the dashboard user data
+      operationId: dashboard
       parameters:
-      - name: integerParam
-        in: path
-        description: Integer parameter to test validation
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int32
-      - name: booleanParam
-        in: path
-        description: Boolean parameter to test validation
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: boolean
-      - name: stringParam
-        in: path
-        description: string parameter to test validation
+      - name: username
+        in: header
+        description: string containing the logged username
         required: true
         style: simple
         explode: false
         schema:
           type: string
-      - name: doubleParam
-        in: path
-        description: string parameter to test validation
+      - name: X-Pp-Token
+        in: header
+        description: string containing the logged user's token
         required: true
         style: simple
         explode: false
         schema:
-          type: number
+          type: string
       responses:
         200:
           description: An paged array of pets
