@@ -1,0 +1,102 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Penapals API",
+    "description": "Penapals API",
+    "contact": {
+      "name": "Ivan Preziosi",
+      "email": "ivan.preziosi@gmail.com"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "1.0",
+    "externalDocs": {},
+    "x-logo": {
+      "url": ""
+    }
+  },
+  "servers": [
+    {
+      "url": "http://example.com",
+      "description": "example server url"
+    }
+  ],
+  "paths": {
+    "/[Version]/users": {
+      "get": {
+        "tags": [],
+        "summary": "Gets the user's dashboard informations",
+        "description": "Gets the user's dashboard informations",
+        "operationId": "profile",
+        "parameters": [
+          {
+            "name": "X-Pp-Token",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "style": "",
+            "explode": false,
+            "allowReserved": false,
+            "example": "",
+            "undefined": {}
+          },
+          {
+            "$ref": "#/components/headers/username",
+            "name": "username",
+            "in": "header",
+            "example": ""
+          }
+        ]
+      },
+      "post": {
+        "tags": []
+      },
+      "parameters": [
+        {
+          "name": "Version",
+          "in": "path",
+          "description": "The version of the api requested. ",
+          "required": false,
+          "deprecated": false,
+          "allowEmptyValue": false,
+          "style": "",
+          "explode": false,
+          "allowReserved": false,
+          "example": "V1"
+        }
+      ]
+    }
+  },
+  "components": {
+    "headers": {
+      "username": {
+        "description": "username",
+        "required": false,
+        "deprecated": false,
+        "in": "header"
+      }
+    },
+    "securitySchemes": {
+      "Token": {
+        "type": "http",
+        "description": "Token on login",
+        "name": "X-Pp-Token",
+        "in": "header",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {},
+    "responses": {},
+    "parameters": {}
+  },
+  "security": [
+    {
+      "Token": []
+    }
+  ],
+  "tags": []
+}
