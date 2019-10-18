@@ -33,20 +33,53 @@
         "parameters": [
           {
             "$ref": "#/components/securitySchemes/Token",
-            "name": "Token",
-            "in": "query",
-            "example": ""
+            "name": "token",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "style": "",
+            "explode": false,
+            "allowReserved": false,
+            "example": "",
+            "undefined": {}
           },
           {
-            "$ref": "#/components/securitySchemes/Username",
+            "$ref": "#/components/headers/username",
             "name": "username",
-            "in": "query",
-            "example": ""
+            "in": "header",
+            "description": "",
+            "required": true,
+            "deprecated": false,
+            "allowEmptyValue": false,
+            "style": "",
+            "explode": false,
+            "allowReserved": false,
+            "example": "",
+            "undefined": {}
           }
         ]
       },
       "post": {
-        "tags": []
+        "tags": [],
+        "summary": "Register new user to the server ",
+        "operationId": "Save a new user",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/username",
+            "name": "username",
+            "in": "query",
+            "example": ""
+          },
+          {
+            "$ref": "#/components/parameters/password",
+            "name": "password",
+            "in": "query",
+            "example": ""
+          }
+        ],
+        "requestBody": {}
       },
       "parameters": [
         {
@@ -65,6 +98,30 @@
     }
   },
   "components": {
+    "parameters": {
+      "username": {
+        "in": "query",
+        "description": "username",
+        "required": true,
+        "deprecated": false,
+        "allowEmptyValue": false,
+        "style": "",
+        "explode": false,
+        "allowReserved": false,
+        "example": ""
+      },
+      "password": {
+        "in": "query",
+        "description": "password",
+        "required": true,
+        "deprecated": false,
+        "allowEmptyValue": false,
+        "style": "",
+        "explode": false,
+        "allowReserved": false,
+        "example": ""
+      }
+    },
     "headers": {
       "username": {
         "description": "username",
@@ -90,13 +147,27 @@
       }
     },
     "schemas": {},
-    "responses": {},
-    "parameters": {}
+    "responses": {}
   },
   "security": [
     {
       "Token": []
+    },
+    {
+      "Username": []
     }
   ],
-  "tags": []
+  "tags": [
+    {
+      "name": "Public",
+      "description": "Refers to api resources that are public and need no authentication"
+    },
+    {
+      "name": "Private",
+      "description": "Refers to api resources which are private and require valid authenticatin to be accessed (by login)."
+    }
+  ],
+  "externalDocs": {
+    "url": "https://raw.githubusercontent.com/ivanpreziosi/PenPals/dev-01/api_description_OpenAPI.yaml"
+  }
 }
