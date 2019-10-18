@@ -8,6 +8,9 @@ info:
 servers:
 - url: http://localhost:1312/V1
 paths:
+#
+#### LOGIN paths:
+#
   /login:
     post:
       tags:
@@ -19,14 +22,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginPayload'
-        required: true
+              required:
+              - username
+              - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
       responses:
         200:
-          description: An paged array of pets
+          description: Login successful, returns token
           headers:
-            x-next:
-              description: A link to the next page of responses
+            X-Pp-Token:
+              description: The computed token
               style: simple
               explode: false
               schema:
@@ -34,14 +43,40 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pets'
-        default:
-          description: unexpected error
+                required:
+                - status
+                - code
+                - message
+                - payload
+                properties:
+                  status:
+                    type: string
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  payload:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      username:
+                        type: string
+                      authTokencontrolToken:
+                        type: string
+        401:
+          description: Login failed. check your credentials
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-      x-router-controller: petsController
+                $ref: '#/components/schemas/ApiResponse'
+#
+#### /LOGIN paths:
+#
+#############################################################################
+#
+#### /LOGIN paths:
+#
   /paramTestsPath/{integerParam}/{booleanParam}/{stringParam}/{doubleParam}:
     get:
       tags:
@@ -275,48 +310,36 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiResponse'
 components:
   schemas:
-    ResponseTest:
-      type: array
-      items:
-        $ref: '#/components/schemas/TestObject'
-    TestObject:
-      required:
-      - booleanProperty
-      - doubleProperty
-      - integerProperty
-      - stringProperty
-      properties:
-        integerProperty:
-          type: integer
-        booleanProperty:
-          type: boolean
-        stringProperty:
-          type: string
-        doubleProperty:
-          type: number
-    LoginPayload:
-      required:
+    ## USER SCHEMA ##
+    User:
+      required: 
       - username
-      - password
       properties:
+        id:
+          type: integer
         username:
           type: string
         password:
           type: string
-    Pets:
-      type: array
-      items:
-        $ref: '#/components/schemas/Pet'
-    Error:
+        authTokencontrolToken:
+          type: string
+    ## API RESPONSE SCHEMA ##
+    ApiResponse:
       required:
+      - status
       - code
       - message
       properties:
+        status:
+          type: string
+          example: "KO" 
         code:
-          type: integer
-          format: int32
+          type: string
+          example: "A-SHORT-DESCRIPTIVE-CODE"
         message:
           type: string
+          example: "A verbose message about whats going on"
+          
