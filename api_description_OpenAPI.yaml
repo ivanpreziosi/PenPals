@@ -32,22 +32,15 @@
         "operationId": "profile",
         "parameters": [
           {
-            "name": "X-Pp-Token",
-            "in": "header",
-            "description": "",
-            "required": true,
-            "deprecated": false,
-            "allowEmptyValue": false,
-            "style": "",
-            "explode": false,
-            "allowReserved": false,
-            "example": "",
-            "undefined": {}
+            "$ref": "#/components/securitySchemes/Token",
+            "name": "Token",
+            "in": "query",
+            "example": ""
           },
           {
-            "$ref": "#/components/headers/username",
+            "$ref": "#/components/securitySchemes/Username",
             "name": "username",
-            "in": "header",
+            "in": "query",
             "example": ""
           }
         ]
@@ -85,6 +78,13 @@
         "type": "http",
         "description": "Token on login",
         "name": "X-Pp-Token",
+        "in": "header",
+        "scheme": "bearer"
+      },
+      "Username": {
+        "type": "http",
+        "description": "username to be provided along with token",
+        "name": "username",
         "in": "header",
         "scheme": "bearer"
       }
