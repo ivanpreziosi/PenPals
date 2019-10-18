@@ -151,6 +151,9 @@
   "security": [
     {
       "Token": []
+    },
+    {
+      "Token ": []
     }
   ],
   "tags": [
@@ -164,6 +167,7 @@
     }
   ],
   "externalDocs": {
-    "url": "https://raw.githubusercontent.com/ivanpreziosi/PenPals/dev-01/api_description_OpenAPI.yaml"
+    "description": "Generated docs",
+    "url": "https://bump.sh/doc/penpals"
   }
 }
