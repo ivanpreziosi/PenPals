@@ -80,7 +80,7 @@ paths:
 #
 #############################################################################
 #
-#### /LOGIN paths:
+#### Dashboard path:
 #
   /users:
     get:
@@ -108,13 +108,6 @@ paths:
       responses:
         200:
           description: An paged array of pets
-          headers:
-            x-next:
-              description: A link to the next page of responses
-              style: simple
-              explode: false
-              schema:
-                type: string
           content:
             application/json:
               schema:
