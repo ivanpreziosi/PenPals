@@ -51,10 +51,13 @@ paths:
                 properties:
                   status:
                     type: string
+                    example: "OK"
                   code:
                     type: string
+                    example: "USER-LOGGED-IN"
                   message:
                     type: string
+                    example: "User logged in successfully."
                   payload:
                     type: object
                     properties:
@@ -62,8 +65,10 @@ paths:
                         type: integer
                       username:
                         type: string
+                        example: "ExampleUsername"
                       authTokencontrolToken:
                         type: string
+                        example: "667a4af374347aaebc6d04d8572fbb85"
         401:
           description: Login failed. check your credentials
           content:
