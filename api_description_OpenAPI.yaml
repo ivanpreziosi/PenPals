@@ -1,13 +1,16 @@
 openapi: 3.0.0
 info:
-  title: Penpals API
+  title: Penpals V1 API
+  contact:
+   name: Ivan Preziosi
+   email: ivan.preziosi@gmail.com
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
   version: 0.0.1
 servers:
 - url: http://localhost:1312/V1
-paths:
+
 #############################################
 # ██████╗  █████╗ ████████╗██╗  ██╗███████╗ #
 # ██╔══██╗██╔══██╗╚══██╔══╝██║  ██║██╔════╝ #
@@ -16,6 +19,7 @@ paths:
 # ██║     ██║  ██║   ██║   ██║  ██║███████║ #
 # ╚═╝     ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝ #
 #############################################
+paths:
 #### LOGIN 
 #
   /login:
@@ -77,9 +81,67 @@ paths:
 #### /LOGIN 
 #############################################################################
 #
-#### Dashboard
-#
+
+#### USERS###################################################################
   /users:
+    ## POST - SAVE USER
+    post:
+      tags:
+      - User
+      summary: (PUBLIC) Register endpoint
+      operationId: register
+      requestBody:
+        description: Register new user
+        content:
+          application/json:
+            schema:
+              required:
+              - username
+              - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Login successful, returns token
+          headers:
+            X-Pp-Token:
+              description: The computed token
+              style: simple
+              explode: false
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                required:
+                - status
+                - code
+                - message
+                - payload
+                properties:
+                  status:
+                    type: string
+                    example: "OK"
+                  code:
+                    type: string
+                    example: "USER-LOGGED-IN"
+                  message:
+                    type: string
+                    example: "User logged in successfully."
+                  payload:
+                    $ref: '#/components/schemas/User'
+        401:
+          description: Login failed. check your credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+    ######################################################
+    
+    #### GET Dashboard
     get:
       tags:
       - User
@@ -124,21 +186,30 @@ paths:
                     type: string
                     example: "Dashboard info succesfully obtained."
                   user:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                      username:
-                        type: string
-                        example: "ExampleUsername"
+                    $ref: '#/components/schemas/User'
+                  newRequests:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/ContactRequest'
+                  undeliveredReponses:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ContactResponse'
+                  unreadResponses:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ContactResponse'
         401:
           description: Login failed. check your credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
-      
-###############################################################      
+      ##### /DASHBOARD
+#### /USERS##################################################################
+
+
+
 
 ##############################################################################################
 #  ██████╗ ██████╗ ███╗   ███╗██████╗  ██████╗ ███╗   ██╗███████╗███╗   ██╗████████╗███████╗ #
@@ -187,6 +258,7 @@ components:
           format: date-time
         isActive:
           type: integer
+          example: 1
     ## CONTACT RESPONSE ##
     ContactResponse :
       required: 
@@ -208,8 +280,10 @@ components:
           format: date-time
         isActive:
           type: integer
+          example: 1
         isDelivered:
           type: integer
+          example: 0
     ## API RESPONSE SCHEMA ##
     ApiResponse:
       required:
