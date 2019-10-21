@@ -8,8 +8,15 @@ info:
 servers:
 - url: http://localhost:1312/V1
 paths:
-#
-#### LOGIN path:
+#############################################
+# ██████╗  █████╗ ████████╗██╗  ██╗███████╗ #
+# ██╔══██╗██╔══██╗╚══██╔══╝██║  ██║██╔════╝ #
+# ██████╔╝███████║   ██║   ███████║███████╗ #
+# ██╔═══╝ ██╔══██║   ██║   ██╔══██║╚════██║ #
+# ██║     ██║  ██║   ██║   ██║  ██║███████║ #
+# ╚═╝     ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝ #
+#############################################
+#### LOGIN 
 #
   /login:
     post:
@@ -59,16 +66,7 @@ paths:
                     type: string
                     example: "User logged in successfully."
                   payload:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                      username:
-                        type: string
-                        example: "ExampleUsername"
-                      authTokencontrolToken:
-                        type: string
-                        example: "667a4af374347aaebc6d04d8572fbb85"
+                    $ref: '#/components/schemas/User'
         401:
           description: Login failed. check your credentials
           content:
@@ -76,11 +74,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
 #
-#### /LOGIN path:
-#
+#### /LOGIN 
 #############################################################################
 #
-#### Dashboard path:
+#### Dashboard
 #
   /users:
     get:
@@ -107,191 +104,50 @@ paths:
           type: string
       responses:
         200:
-          description: An paged array of pets
+          description: Logged user's dashboard info
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pets'
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      x-router-controller: petsController
-  /responseBodyTest:
-    get:
-      tags:
-      - pets
-      summary: should return an object with both right and wrong properties
-      operationId: responseBodyTest
-      responses:
-        200:
-          description: Expected response to a valid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResponseTest'
-      x-router-controller: petsController
-  /pets:
-    get:
-      tags:
-      - pets
-      summary: List all pets
-      operationId: listPets
-      parameters:
-      - name: limit
-        in: query
-        description: How many items to return at one time (max 100)
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
-          format: int32
-      responses:
-        200:
-          description: An paged array of pets
-          headers:
-            x-next:
-              description: A link to the next page of responses
-              style: simple
-              explode: false
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    post:
-      tags:
-      - pets
-      summary: Create a pet
-      operationId: createPets
-      requestBody:
-        description: Pet to add to the store
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Pet'
-        required: true
-        x-name: pet
-      responses:
-        201:
-          description: Update status
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pets'
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    delete:
-      description: deletes all the pets
-      operationId: deletePets
-      responses:
-        204:
-          description: pets deleted
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /pets/{petId}:
-    get:
-      tags:
-      - pets
-      summary: Info for a specific pet
-      operationId: showPetById
-      parameters:
-      - name: petId
-        in: path
-        description: The id of the pet to retrieve
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-      responses:
-        200:
-          description: Expected response to a valid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pet'
-        404:
-          description: pet not found
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    put:
-      description: updates a pet based on its petId
-      operationId: updatePet
-      parameters:
-      - name: petId
-        in: path
-        description: ID of pet to update
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-          format: int64
-      requestBody:
-        description: Pet to update
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Pet'
-        required: true
-        x-name: pet
-      responses:
-        200:
-          description: pet updated
-        404:
-          description: pet not found
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    delete:
-      description: deletes a single pet based on the ID supplied
-      operationId: deletePet
-      parameters:
-      - name: petId
-        in: path
-        description: The id of the pet to delete
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: integer
-      responses:
-        204:
-          description: pet deleted
-        404:
-          description: pet not found
-        default:
-          description: unexpected error
+                required:
+                - status
+                - code
+                - message
+                - user
+                properties:
+                  status:
+                    type: string
+                    example: "OK"
+                  code:
+                    type: string
+                    example: "DASHBOARD-INFO"
+                  message:
+                    type: string
+                    example: "Dashboard info succesfully obtained."
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      username:
+                        type: string
+                        example: "ExampleUsername"
+        401:
+          description: Login failed. check your credentials
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
+      
+###############################################################      
+
+##############################################################################################
+#  ██████╗ ██████╗ ███╗   ███╗██████╗  ██████╗ ███╗   ██╗███████╗███╗   ██╗████████╗███████╗ #
+# ██╔════╝██╔═══██╗████╗ ████║██╔══██╗██╔═══██╗████╗  ██║██╔════╝████╗  ██║╚══██╔══╝██╔════╝ #
+# ██║     ██║   ██║██╔████╔██║██████╔╝██║   ██║██╔██╗ ██║█████╗  ██╔██╗ ██║   ██║   ███████╗ #
+# ██║     ██║   ██║██║╚██╔╝██║██╔═══╝ ██║   ██║██║╚██╗██║██╔══╝  ██║╚██╗██║   ██║   ╚════██║ #
+# ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║     ╚██████╔╝██║ ╚████║███████╗██║ ╚████║   ██║   ███████║ #
+# ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝      ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝  #
+ #############################################################################################
 components:
   schemas:
     ## USER SCHEMA ##
@@ -307,6 +163,53 @@ components:
           type: string
         authTokencontrolToken:
           type: string
+    ## CONTACT REQUEST ##
+    ContactRequest:
+      required: 
+      - id
+      properties:
+        id:
+          type: integer
+        user: 
+          $ref: '#/components/schemas/User'
+        contactResponses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactResponse'
+        usersDelivered:
+          type: array
+          items: 
+            $ref: '#/components/schemas/User'
+        requestText:
+          type: string
+        requestCreateTime:
+          type: string
+          format: date-time
+        isActive:
+          type: integer
+    ## CONTACT RESPONSE ##
+    ContactResponse :
+      required: 
+      - id
+      - contactRequest
+      properties:
+        id:
+          type: integer
+        contactRequest:
+          $ref: '#/components/schemas/ContactRequest'
+        user: 
+          $ref: '#/components/schemas/User'
+        recipient: 
+          $ref: '#/components/schemas/User'
+        responseText:
+          type: string
+        resposeCreateTime:
+          type: string
+          format: date-time
+        isActive:
+          type: integer
+        isDelivered:
+          type: integer
     ## API RESPONSE SCHEMA ##
     ApiResponse:
       required:
@@ -323,4 +226,3 @@ components:
         message:
           type: string
           example: "A verbose message about whats going on"
-          
