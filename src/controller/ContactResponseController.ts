@@ -81,7 +81,7 @@ export class ContactResponseController {
                 where: {
                     id: request.body.requestId
                 },
-                relations: ["usersDelivered"]
+                relations: ["usersResponded"]
             });
 
             // load recipient user
@@ -96,13 +96,13 @@ export class ContactResponseController {
             const result = await this.contactResponseRepository.save(contactResponse);
 
             //set this request as delivered for this user
-            console.log("contactRequest.usersDelivered");
-            console.log(contactRequest.usersDelivered);
-            let usersDelivered = contactRequest.usersDelivered;
-            usersDelivered.push(loggedUser);
-            console.log(usersDelivered);
-            contactRequest.usersDelivered = usersDelivered;
-            console.log(contactRequest.usersDelivered);
+            console.log("contactRequest.usersResponded");
+            console.log(contactRequest.usersResponded);
+            let usersResponded = contactRequest.usersResponded;
+            usersResponded.push(loggedUser);
+            console.log(usersResponded);
+            contactRequest.usersResponded = usersResponded;
+            console.log(contactRequest.usersResponded);
             await this.contactRequestRepository.save(contactRequest);
             ////////////////////////////////////////////////
 

@@ -21,7 +21,7 @@ export class User {
 	@OneToMany(type => ContactResponse, contactResponse => contactResponse.recipient)
 	recipientResponses: ContactResponse[];
 	
-	@ManyToMany(type => ContactRequest, contactRequest => contactRequest.usersDelivered)
+	@ManyToMany(type => ContactRequest, contactRequest => contactRequest.usersResponded)
     ViewedRequests: ContactRequest[];
 
     @Column({

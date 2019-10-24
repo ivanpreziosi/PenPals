@@ -40,21 +40,21 @@ export class UserRepository extends Repository<User> {
         }
     }
 
-    getDeliveredRequests(user: User) {
+    getRespondedRequests(user: User) {
         var contactRequestRepository = getRepository(ContactRequest);
         return contactRequestRepository.createQueryBuilder('request')
             .select("request.id")
             .innerJoin(
-                'request.usersDelivered',
+                'request.usersResponded',
                 'user',
                 '(user.username = :username)',
                 { username: user.username }
             ).where("(request.isActive = '1' AND request.requestCreateTime >= '" + DateHelper.getRequestExpirationDate().toString() + "')").getMany();
     }
 
-    async getUndeliveredRequests(user: User) {
+    async getUnrespondedRequests(user: User) {
         var contactRequestRepository = getRepository(ContactRequest);
-        var deliveredRequests = await this.getDeliveredRequests(user);
+        var deliveredRequests = await this.getRespondedRequests(user);
 
         var deliveredRequestsIds = new Array();
         deliveredRequests.forEach(req => {

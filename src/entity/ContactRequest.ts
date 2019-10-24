@@ -14,7 +14,7 @@ export class ContactRequest {
 	
 	@ManyToMany(type => User)
     @JoinTable()
-    usersDelivered: User[];
+    usersResponded: User[];
 
     @ManyToOne(type => User, user => user.contactRequests)
     user: User;

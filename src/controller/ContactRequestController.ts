@@ -65,7 +65,7 @@ export class ContactRequestController {
             const loggedUser = await this.userRepository.findByUsername(hUsername);
 
             //get requests
-            const result = await this.userRepository.getUndeliveredRequests(loggedUser);            
+            const result = await this.userRepository.getUnrespondedRequests(loggedUser);            
 
             return {
                 status: "OK",
@@ -136,7 +136,7 @@ export class ContactRequestController {
         let contactRequest = new ContactRequest();
         contactRequest.user = loggedUser;
         contactRequest.requestText = request.body.requestText;
-        contactRequest.usersDelivered= [loggedUser];
+        contactRequest.usersResponded= [loggedUser];
 
         //save model          
         try {

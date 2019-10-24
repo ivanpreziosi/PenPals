@@ -32,7 +32,7 @@ export class UserController {
             const user = await this.userRepository.findByUsername(hUsername);
 
 
-            const undeliveredRequests = await this.userRepository.getUndeliveredRequests(user);
+            const undeliveredRequests = await this.userRepository.getUnrespondedRequests(user);
             
             const undeliveredReponses = await this.userRepository.getUndeliveredResponses(user);
 
