@@ -22,6 +22,11 @@ export class ContactRequest {
     @Column({
 		type: "text",
 	})
+	requestTitle: string;
+	
+	@Column({
+		type: "text",
+	})
     requestText: string;
 	
 	@Column({

@@ -118,6 +118,8 @@ export class ContactRequestController {
         const schema = Joi.object({
             requestText: Joi.string()
                 .required(),
+            requestTitle: Joi.string()
+                .required(),
         })
 
         let validation = schema.validate(request.body);
@@ -135,6 +137,7 @@ export class ContactRequestController {
         //create model        
         let contactRequest = new ContactRequest();
         contactRequest.user = loggedUser;
+        contactRequest.requestTitle = request.body.requestTitle;
         contactRequest.requestText = request.body.requestText;
         contactRequest.usersResponded= [loggedUser];
 
