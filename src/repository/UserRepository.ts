@@ -107,4 +107,16 @@ export class UserRepository extends Repository<User> {
         });
     }
 
+
+    getInbox(user:User){
+        var contactRequestRepository = getRepository(ContactRequest);
+        return contactRequestRepository.find({
+            relations:["user","contactResponses"],
+            where: {
+                user: user,
+                isActive: 1
+            }
+        });
+    }
+
 }

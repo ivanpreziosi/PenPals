@@ -33,7 +33,7 @@ export class UserController {
 
 
             const undeliveredRequests = await this.userRepository.getUnrespondedRequests(user);
-            
+
             const undeliveredReponses = await this.userRepository.getUndeliveredResponses(user);
 
             const unreadResponses = await this.userRepository.getUnreadResponses(user);
@@ -192,5 +192,28 @@ export class UserController {
         return DefaultResponse.responseData;
 
     }
+
+    async inbox(request: Request, response: Response, next: NextFunction) {
+        try {
+
+            let hUsername = request.header('username');
+            const user = await this.userRepository.findByUsername(hUsername);
+
+            var inbox = await this.userRepository.getInbox(user);
+            DefaultResponse.responseData.status = "OK";
+            DefaultResponse.responseData.code = "USER-INBOX";
+            DefaultResponse.responseData.message = "User inbox data following.";
+            DefaultResponse.responseData.payload = inbox;
+        } catch (e) {
+            console.log(e);
+            DefaultResponse.responseData.status = "KO";
+            DefaultResponse.responseData.code = e.code;
+            DefaultResponse.responseData.message = e.message;
+            DefaultResponse.responseData.payload = null;
+            response.set('status', 418);
+        }
+        return DefaultResponse.responseData;
+    }
+
 
 }
