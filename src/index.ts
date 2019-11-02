@@ -12,7 +12,6 @@ import { UserRepository } from "./repository/UserRepository";
 
 var AppConfig = require('./app_config');
 
-
 createConnection().then(async connection => {
 
     var listenPort = AppConfig.listenPort;
@@ -22,6 +21,8 @@ createConnection().then(async connection => {
     app.use(bodyParser.urlencoded({
         extended: true
     }));
+
+    
 
     //app.use(express.json()) // for parsing application/json
 
@@ -43,6 +44,7 @@ createConnection().then(async connection => {
                 }, function (err) {
                     res.json(require('./tpl/UnauthorizedResponse'));
                 });
+               
             } else {
                 console.log("Public");
                 const result = (new (route.controller as any))[route.action](req, res, next);
@@ -55,7 +57,7 @@ createConnection().then(async connection => {
         });
     });
 
-  
+
 
     // start express server
     app.listen(listenPort);
