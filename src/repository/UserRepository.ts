@@ -115,6 +115,9 @@ export class UserRepository extends Repository<User> {
             where: {
                 user: user,
                 isActive: 1
+            },
+            order: {
+                requestCreateTime: "DESC"
             }
         });
     }
