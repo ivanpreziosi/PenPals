@@ -36,6 +36,64 @@ export class ContactResponseController {
     }
 
 
+    async deliver(request: Request, response: Response, next: NextFunction) {
+        //get current user 
+        let hUsername = request.header('username');
+        let hToken = request.header(require('../app_config').appTokenName);
+
+        const loggedUser = await this.userRepository.findByUsername(hUsername);
+
+        // VALIDATE DATA
+        const Joi = require('@hapi/joi');
+
+        const schema = Joi.object({
+            responseId: Joi.number()
+                .integer()
+                .required()
+        })
+
+        let validation = schema.validate(request.body);
+
+        if (validation.error != null && validation.error != undefined) {
+            DefaultResponse.responseData.status = "KO";
+            DefaultResponse.responseData.code = "DATA-VALIDATION";
+            for (var ii = 0; ii < validation.error.details.length; ii++) {
+                DefaultResponse.responseData.message = validation.error.details[ii].message + " ** ";
+            }
+            response.set('status', 400);
+            return DefaultResponse.responseData;
+        }
+
+        try{
+
+            var contactResponse = await this.contactResponseRepository.findOne({
+                where: {
+                    id: request.body.responseId
+                }
+            });
+
+            contactResponse.isDelivered = 1;
+            await this.contactResponseRepository.save(contactResponse);
+
+            DefaultResponse.responseData.status = "OK";
+            DefaultResponse.responseData.code = "CONTACT-RESPONSE-DELIVERED";
+            DefaultResponse.responseData.message = "Contact response delivered successfully.";
+
+
+        } catch (e) {
+            console.log(e);
+            DefaultResponse.responseData.status = "KO";
+            DefaultResponse.responseData.code = e.code;
+            DefaultResponse.responseData.message = e.message;
+            response.set('status', 418);
+            return DefaultResponse.responseData;
+        }
+
+        return DefaultResponse.responseData;
+
+    }
+
+
     /**
     // Save ContactResponse POST
     **/
