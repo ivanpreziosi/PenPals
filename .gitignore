@@ -6,3 +6,4 @@ tmp/
 temp/
 /database_schema.mwb.bak
 *.code-workspace
+/db_dump.sql

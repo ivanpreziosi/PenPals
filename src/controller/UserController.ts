@@ -1,25 +1,28 @@
-import { getRepository } from "typeorm";
-import { NextFunction, Request, Response } from "express";
+// import typeorm functions
+//import { getRepository } from "typeorm";
+import { getCustomRepository } from "typeorm";
+//import { Not, In, MoreThanOrEqual } from "typeorm";
+
+//entities
 import { User } from "../entity/User";
 import { ContactRequest } from "../entity/ContactRequest";
 import { ContactResponse } from "../entity/ContactResponse";
+import { UserRepository } from "../repository/UserRepository";
+
+//express
+import { NextFunction, Request, Response } from "express";
+
+//utilities
 import { Md5 } from "md5-typescript";
 var DefaultResponse = require('../tpl/DefaultResponse');
+//app config
 var AppConfig = require('../app_config');
-var DateHelper = require('../helper/PenpalsDateUtils');
-import { getCustomRepository } from "typeorm";
-import { UserRepository } from "../repository/UserRepository";
-import { Not, In, MoreThanOrEqual } from "typeorm";
+
 
 export class UserController {
 
+    //orm entities repo
     private userRepository = getCustomRepository(UserRepository);
-    private contactRequestRepository = getRepository(ContactRequest);
-    private contactResponseRepository = getRepository(ContactResponse);
-
-    /****************************
-    // USER RESOURCES ***********
-    ****************************/
 
 	/**
     // retrieve user profile GET
@@ -27,10 +30,9 @@ export class UserController {
     async profile(request: Request, response: Response, next: NextFunction) {
         try {
             let hUsername = request.header('username');
-            let hToken = request.header(require('../app_config').appTokenName);
+            let hToken = request.header(AppConfig.appTokenName);
 
             const user = await this.userRepository.findByUsername(hUsername);
-
 
             const undeliveredRequests = await this.userRepository.getUnrespondedRequests(user);
 
@@ -64,6 +66,7 @@ export class UserController {
         // VALIDATE DATA
         const Joi = require('@hapi/joi');
 
+        //declare validation schema
         const schema = Joi.object({
             username: Joi.string()
                 .alphanum()

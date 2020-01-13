@@ -22,38 +22,48 @@ createConnection().then(async connection => {
         extended: true
     }));
 
-    
+
 
     //app.use(express.json()) // for parsing application/json
 
     // register express routes from defined application routes
     Routes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
+
             if (!route.isPublic) {
-                let userRepository = getCustomRepository(UserRepository);
+
+                //let userRepository = getCustomRepository(UserRepository);
                 var Auth = require('./helper/PenpalsAuthentication');
-                const authResult = Auth.checkAuth(req, userRepository);
+                const authResult = Auth.checkAuth(req);
 
                 authResult.then(function (ar) {
+                    console.log("Authorized");
+                    console.log("Processing request");
                     const result = (new (route.controller as any))[route.action](req, res, next);
                     if (result instanceof Promise) {
-                        result.then(result => result !== null && result !== undefined ? res.json(result) : res.json({ "responseData": { "status": "KO", "code": "ROUTE-ERROR", "message": "Routing error 1:" + route.controller + "-" + route.action } })).catch(e => res.json({ "responseData": { "status": "KO", "code": "ROUTE-ERROR", "message": "Routing error 2" } }));
+                        result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./tpl/UnauthorizedResponse'))).catch(e => res.json(require('./tpl/UnauthorizedResponse')));
                     } else if (result !== null && result !== undefined) {
                         res.json(result);
                     }
+
                 }, function (err) {
+                    console.log("Authorization denied");
+
                     res.json(require('./tpl/UnauthorizedResponse'));
                 });
-               
+
             } else {
-                console.log("Public");
+
+                console.log("Processing request");
                 const result = (new (route.controller as any))[route.action](req, res, next);
                 if (result instanceof Promise) {
                     result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./tpl/UnauthorizedResponse'))).catch(e => res.json(require('./tpl/UnauthorizedResponse')));
                 } else if (result !== null && result !== undefined) {
                     res.json(result);
                 }
+
             }
+
         });
     });
 
