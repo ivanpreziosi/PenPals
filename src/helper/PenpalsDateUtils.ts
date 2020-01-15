@@ -17,5 +17,5 @@ exports.getRequestExpirationDate = function () {
 
 exports.getTokenExpirationDate = function () {
   var moment = require('moment');
-  return moment().subtract(20, 'minutes').format(AppConfig.dbDateFormat);
+  return moment().subtract(AppConfig.appTokenLifespan, 'minutes').format(AppConfig.dbDateFormat);
 };

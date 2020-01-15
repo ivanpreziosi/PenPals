@@ -2,8 +2,8 @@ import { EntityRepository, Repository, getRepository, Not, In, MoreThanOrEqual }
 import { ContactRequest } from "../entity/ContactRequest";
 import { User } from "../entity/User";
 import { ContactResponse } from "../entity/ContactResponse";
-import { request } from "https";
-var PenpalsDateUtils = require('../helper/PenpalsDateUtils');
+
+//var PenpalsDateUtils = require('../helper/PenpalsDateUtils');
 var AppConfig = require('../app_config');
 var DateHelper = require('../helper/PenpalsDateUtils');
 
@@ -27,14 +27,14 @@ export class UserRepository extends Repository<User> {
     checkTokenExpiration(user: User) {
         var moment = require('moment');
         var tokenDate = moment(user.sessionCreateTime).format(AppConfig.dbDateFormat);
-        var expirationdate = PenpalsDateUtils.getTokenExpirationDate();
+        var expirationdate = DateHelper.getTokenExpirationDate();
 
         if (tokenDate < expirationdate) {
             console.log("token expired!");
             return false;
         } else {
             console.log("token still valid!");
-            user.sessionCreateTime = PenpalsDateUtils.getMysqlDateNow();
+            user.sessionCreateTime = DateHelper.getMysqlDateNow();
             this.save(user);
             return true;
         }
