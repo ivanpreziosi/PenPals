@@ -4,14 +4,15 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { Request, Response } from "express";
 import { Routes } from "./routes";
-import { User } from "./entity/User";
-import { Md5 } from "md5-typescript";
-import { getRepository } from "typeorm";
-import { getCustomRepository } from "typeorm";
-import { UserRepository } from "./repository/UserRepository";
 
 var AppConfig = require('./app_config');
 
+
+/**
+ * typeorm create connection vedi:https://github.com/typeorm/typeorm/blob/master/docs/connection-api.md#connection-api
+ * createConnection() - Creates a new connection and registers it in global connection manager. 
+ * If connection options parameter is omitted then connection options are read from ormconfig file or environment variables.
+ */
 createConnection().then(async connection => {
 
     var listenPort = AppConfig.listenPort;
@@ -24,9 +25,12 @@ createConnection().then(async connection => {
 
 
 
-    //app.use(express.json()) // for parsing application/json
-
-    // register express routes from defined application routes
+    /** register express routes from defined application routes in routes.ts
+    * come se dichiarassimo nel ciclo
+    * app.get('/', (request, response) => {
+    *   response.send('Hello world!');
+    * });
+    **/
     Routes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
 
@@ -47,8 +51,8 @@ createConnection().then(async connection => {
                     }
 
                 }, function (err) {
+                    //authresult ritorna picche!
                     console.log("Authorization denied");
-
                     res.json(require('./tpl/UnauthorizedResponse'));
                 });
 
@@ -66,8 +70,6 @@ createConnection().then(async connection => {
 
         });
     });
-
-
 
     // start express server
     app.listen(listenPort);
