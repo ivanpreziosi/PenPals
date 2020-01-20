@@ -30,7 +30,6 @@ export class UserController {
     async profile(request: Request, response: Response, next: NextFunction) {
         try {
             let hUsername = request.header('username');
-            let hToken = request.header(AppConfig.appTokenName);
 
             const user = await this.userRepository.findByUsername(hUsername);
 
@@ -85,6 +84,7 @@ export class UserController {
 
         let validation = schema.validate(request.body);
 
+        //validation gone bad
         if (validation.error != null && validation.error != undefined) {
             DefaultResponse.responseData.status = "KO";
             DefaultResponse.responseData.code = "DATA-VALIDATION";
