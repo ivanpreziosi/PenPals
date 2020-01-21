@@ -5,8 +5,6 @@ import { getCustomRepository } from "typeorm";
 
 //entities
 import { User } from "../entity/User";
-import { ContactRequest } from "../entity/ContactRequest";
-import { ContactResponse } from "../entity/ContactResponse";
 import { UserRepository } from "../repository/UserRepository";
 
 //express
@@ -99,7 +97,7 @@ export class UserController {
         let user = new User();
         user.username = request.body.username;
         user.password = Md5.init(request.body.password);
-        user.SetToken(request);
+        this.userRepository.SetToken(request,user);
 
         //save model          
         try {
@@ -169,7 +167,7 @@ export class UserController {
                 };
             } else {
                 let user = result[0];
-                user.SetToken(request);
+                this.userRepository.SetToken(request,user);
                 await this.userRepository.save(user);
                 console.log(user);
                 DefaultResponse.responseData.status = "OK";

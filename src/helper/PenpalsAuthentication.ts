@@ -14,9 +14,9 @@ exports.checkAuth = async function (request) {
 		select: ['username','id','sessionToken','sessionCreateTime'],
 		where: {username: hUsername}
 	});
-	console.log(userToCheck);
-	var controlToken = userToCheck.CreateControlToken(request);
-	console.log('CHECK-AUTH');
+
+	var controlToken = userRepository.CreateControlToken(request,userToCheck);
+
 
 	//controllo formale
 	console.log('formal-check');
