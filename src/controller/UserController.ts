@@ -7,6 +7,7 @@ import { getCustomRepository } from "typeorm";
 import { User } from "../entity/User";
 import { UserRepository } from "../repository/UserRepository";
 import { ContactRequestRepository } from "../repository/ContactRequestRepository";
+import { ContactResponseRepository } from "../repository/ContactResponseRepository";
 
 //express
 import { NextFunction, Request, Response } from "express";
@@ -23,6 +24,7 @@ export class UserController {
     //orm entities repo
     private userRepository = getCustomRepository(UserRepository);
     private contactRequestRepository = getCustomRepository(ContactRequestRepository);
+    private contactResponseRepository = getCustomRepository(ContactResponseRepository);
 
 	/**
     // retrieve user profile GET
@@ -30,14 +32,17 @@ export class UserController {
     async profile(request: Request, response: Response) {
         try {
             let hUsername = request.header('username');
-
+            console.log("await this.userRepository.findByUsername");
             const user = await this.userRepository.findByUsername(hUsername);
 
+            console.log("await this.contactRequestRepository.getUnrespondedRequests");
             const undeliveredRequests = await this.contactRequestRepository.getUnrespondedRequests(user);
 
-            const undeliveredReponses = await this.userRepository.getUndeliveredResponses(user);
+            console.log("await this.contactResponseRepository.getUndeliveredResponses");
+            const undeliveredReponses = await this.contactResponseRepository.getUndeliveredResponses(user);
 
-            const unreadResponses = await this.userRepository.getUnreadResponses(user);
+            console.log("await this.contactResponseRepository.getUnreadResponses");
+            const unreadResponses = await this.contactResponseRepository.getUnreadResponses(user);
 
             return {
                 status: "OK",
@@ -202,7 +207,7 @@ export class UserController {
             let hUsername = request.header('username');
             const user = await this.userRepository.findByUsername(hUsername);
 
-            var inbox = await this.userRepository.getInbox(user);
+            var inbox = await this.contactRequestRepository.getInbox(user);
             DefaultResponse.responseData.status = "OK";
             DefaultResponse.responseData.code = "USER-INBOX";
             DefaultResponse.responseData.message = "User inbox data following.";

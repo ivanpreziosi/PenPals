@@ -1,8 +1,10 @@
 import { getCustomRepository, getRepository } from "typeorm";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { ContactRequest } from "../entity/ContactRequest";
 import { ContactResponse } from "../entity/ContactResponse";
 import { UserRepository } from "../repository/UserRepository";
+import { ContactResponseRepository } from "../repository/ContactResponseRepository";
+import { ContactRequestRepository } from "../repository/ContactRequestRepository";
 import { MoreThanOrEqual } from "typeorm";
 import { Not } from "typeorm";
 var DefaultResponse = require('../tpl/DefaultResponse');
@@ -11,8 +13,8 @@ var DateHelper = require('../helper/PenpalsDateUtils');
 export class ContactResponseController {
 
     private userRepository = getCustomRepository(UserRepository);
-    private contactRequestRepository = getRepository(ContactRequest);
-    private contactResponseRepository = getRepository(ContactResponse);
+    private contactRequestRepository = getCustomRepository(ContactRequestRepository);
+    private contactResponseRepository = getCustomRepository(ContactResponseRepository);
 
     /**
     // get my responses GET

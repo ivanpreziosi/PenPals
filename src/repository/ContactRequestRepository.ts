@@ -47,4 +47,17 @@ export class ContactRequestRepository extends Repository<ContactRequest> {
         });
     }    
 
+    async getInbox(user:User){
+        return this.find({
+            relations:["user","contactResponses"],
+            where: {
+                user: user,
+                isActive: 1
+            },
+            order: {
+                requestCreateTime: "DESC"
+            }
+        });
+    }
+
 }
