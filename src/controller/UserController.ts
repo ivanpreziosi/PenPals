@@ -6,6 +6,7 @@ import { getCustomRepository } from "typeorm";
 //entities
 import { User } from "../entity/User";
 import { UserRepository } from "../repository/UserRepository";
+import { ContactRequestRepository } from "../repository/ContactRequestRepository";
 
 //express
 import { NextFunction, Request, Response } from "express";
@@ -21,6 +22,7 @@ export class UserController {
 
     //orm entities repo
     private userRepository = getCustomRepository(UserRepository);
+    private contactRequestRepository = getCustomRepository(ContactRequestRepository);
 
 	/**
     // retrieve user profile GET
@@ -31,7 +33,7 @@ export class UserController {
 
             const user = await this.userRepository.findByUsername(hUsername);
 
-            const undeliveredRequests = await this.userRepository.getUnrespondedRequests(user);
+            const undeliveredRequests = await this.contactRequestRepository.getUnrespondedRequests(user);
 
             const undeliveredReponses = await this.userRepository.getUndeliveredResponses(user);
 

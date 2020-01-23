@@ -6,7 +6,6 @@ import { ContactResponse } from "../entity/ContactResponse";
 import {Request} from "express";
 var PenpalsDateUtils = require('../helper/PenpalsDateUtils');
 
-var AppConfig = require('../app_config');
 var DateHelper = require('../helper/PenpalsDateUtils');
 import {Md5} from "md5-typescript";
 var AppConfig = require('../app_config');
@@ -74,46 +73,7 @@ export class UserRepository extends Repository<User> {
         }
     }
 
-    getRespondedRequests(user: User) {
-        var contactRequestRepository = getRepository(ContactRequest);
-        return contactRequestRepository.createQueryBuilder('request')
-            .select("request.id")
-            .innerJoin(
-                'request.usersResponded',
-                'user',
-                '(user.username = :username)',
-                { username: user.username }
-            ).where("(request.isActive = '1' AND request.requestCreateTime >= '" + DateHelper.getRequestExpirationDate().toString() + "')").getMany();
-    }
-
-    async getUnrespondedRequests(user: User) {
-        var contactRequestRepository = getRepository(ContactRequest);
-        var deliveredRequests = await this.getRespondedRequests(user);
-
-        var deliveredRequestsIds = new Array();
-        deliveredRequests.forEach(req => {
-            deliveredRequestsIds.push(req.id);
-        });
-
-        var queryBuilderParams = null;
-        if (deliveredRequestsIds.length > 0) {
-            queryBuilderParams = {
-                id: Not(In(deliveredRequestsIds)),
-                isActive: 1,
-                requestCreateTime: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString())
-            };
-        } else {
-            queryBuilderParams = {
-                isActive: 1,
-                requestCreateTime: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString())
-            };
-        }
-        
-        return contactRequestRepository.find({
-            relations:["user"],
-            where: queryBuilderParams
-        });
-    }
+    
 
     getUndeliveredResponses(user: User) {
         var contactResponseRepository = getRepository(ContactResponse);

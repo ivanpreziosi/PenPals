@@ -68,7 +68,7 @@ createConnection().then(async connection => {
             } else {
 
                 console.log("Processing public request");
-                const result = (new (route.controller as any))[route.action](req, res, next);
+                const result = (new (route.controller as any))[route.action](req, res);
                 if (result instanceof Promise) {
                     result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./tpl/UnauthorizedResponse'))).catch(e => res.json(require('./tpl/UnauthorizedResponse')));
                 } else if (result !== null && result !== undefined) {
