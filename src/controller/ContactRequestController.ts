@@ -15,7 +15,7 @@ export class ContactRequestController {
     /**
     // get my requests GET
     **/
-    async mine(request: Request, response: Response, next: NextFunction) {
+    async mine(request: Request, response: Response) {
         try {
             //get current user 
             let hUsername = request.header('username');
@@ -34,7 +34,7 @@ export class ContactRequestController {
     /**
     // get a single request GET
     **/
-    async single(request: Request, response: Response, next: NextFunction) {
+    async single(request: Request, response: Response) {
         try {
             //get request
             const result = await this.contactRequestRepository.findOne({
@@ -57,7 +57,7 @@ export class ContactRequestController {
     /**
    // get others requests GET
    **/
-    async all(request: Request, response: Response, next: NextFunction) {
+    async all(request: Request, response: Response) {
         try {
             //get current user 
             let hUsername = request.header('username');
@@ -82,7 +82,7 @@ export class ContactRequestController {
     /**
     // get a user's requests GET
     **/
-    async user(request: Request, response: Response, next: NextFunction) {
+    async user(request: Request, response: Response) {
         try {
             //get requests
             const result = await this.contactRequestRepository.find({
@@ -104,7 +104,7 @@ export class ContactRequestController {
     /**
     // Save ContactRequest POST
     **/
-    async save(request: Request, response: Response, next: NextFunction) {
+    async save(request: Request, response: Response) {
         //get current user 
         let hUsername = request.header('username');
         let hToken = request.header(require('../app_config').appTokenName);

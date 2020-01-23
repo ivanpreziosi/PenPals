@@ -53,9 +53,7 @@ export class User {
 		nullable: true,
 		select: false
 	})
-    sessionCreateTime: number;
-
-	
+    sessionCreateTime: number;	
 	
 	
 }

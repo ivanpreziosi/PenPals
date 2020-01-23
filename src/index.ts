@@ -5,6 +5,8 @@ import * as bodyParser from "body-parser";
 import { Request, Response } from "express";
 import { Routes } from "./routes";
 
+import { UserController } from "./controller/UserController";
+
 var AppConfig = require('./app_config');
 
 
@@ -27,12 +29,19 @@ createConnection().then(async connection => {
 
     /** register express routes from defined application routes in routes.ts
     * come se dichiarassimo nel ciclo
-    * app.get('/', (request, response) => {
-    *   response.send('Hello world!');
-    * });
+    *
+    app.get("/" + AppConfig.version + "/users", ((req: Request, res: Response) => {
+        let userController = new UserController;
+        const result = userController.profile(req, res);
+        if (result instanceof Promise) {
+            result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./tpl/UnauthorizedResponse'))).catch(e => res.json(require('./tpl/UnauthorizedResponse')));
+        } else if (result !== null && result !== undefined) {
+            res.json(result);
+        }
+    }));
     **/
     Routes.forEach(route => {
-        (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
+        (app as any)[route.method](route.route, (req: Request, res: Response) => {
 
             if (!route.isPublic) {
 
@@ -43,7 +52,7 @@ createConnection().then(async connection => {
                 authResult.then(function (ar) {
                     console.log("Authorized");
                     console.log("Processing request");
-                    const result = (new (route.controller as any))[route.action](req, res, next);
+                    const result = (new (route.controller as any))[route.action](req, res);
                     if (result instanceof Promise) {
                         result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./tpl/UnauthorizedResponse'))).catch(e => res.json(require('./tpl/UnauthorizedResponse')));
                     } else if (result !== null && result !== undefined) {
@@ -58,7 +67,7 @@ createConnection().then(async connection => {
 
             } else {
 
-                console.log("Processing request");
+                console.log("Processing public request");
                 const result = (new (route.controller as any))[route.action](req, res, next);
                 if (result instanceof Promise) {
                     result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./tpl/UnauthorizedResponse'))).catch(e => res.json(require('./tpl/UnauthorizedResponse')));

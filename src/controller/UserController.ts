@@ -25,7 +25,7 @@ export class UserController {
 	/**
     // retrieve user profile GET
     **/
-    async profile(request: Request, response: Response, next: NextFunction) {
+    async profile(request: Request, response: Response) {
         try {
             let hUsername = request.header('username');
 
@@ -59,7 +59,7 @@ export class UserController {
     /**
     // Save user POST
     **/
-    async save(request: Request, response: Response, next: NextFunction) {
+    async save(request: Request, response: Response) {
         // VALIDATE DATA
         const Joi = require('@hapi/joi');
 
@@ -122,7 +122,7 @@ export class UserController {
 	/**
     // login user GET
     **/
-    async login(request: Request, response: Response, next: NextFunction) {
+    async login(request: Request, response: Response) {
         // VALIDATE DATA
         const Joi = require('@hapi/joi');
 
@@ -194,7 +194,7 @@ export class UserController {
 
     }
 
-    async inbox(request: Request, response: Response, next: NextFunction) {
+    async inbox(request: Request, response: Response) {
         try {
 
             let hUsername = request.header('username');

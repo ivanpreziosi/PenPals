@@ -17,7 +17,7 @@ export class ContactResponseController {
     /**
     // get my responses GET
     **/
-    async request(request: Request, response: Response, next: NextFunction) {
+    async request(request: Request, response: Response) {
         try {
 
             //get requests
@@ -36,7 +36,7 @@ export class ContactResponseController {
     }
 
 
-    async deliver(request: Request, response: Response, next: NextFunction) {
+    async deliver(request: Request, response: Response) {
         //get current user 
         let hUsername = request.header('username');
         let hToken = request.header(require('../app_config').appTokenName);
@@ -97,7 +97,7 @@ export class ContactResponseController {
     /**
     // Save ContactResponse POST
     **/
-    async save(request: Request, response: Response, next: NextFunction) {
+    async save(request: Request, response: Response) {
         //get current user 
         let hUsername = request.header('username');
         let hToken = request.header(require('../app_config').appTokenName);
