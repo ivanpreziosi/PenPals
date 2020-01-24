@@ -1,5 +1,4 @@
 import { EntityRepository, Repository, getRepository, Not, In, MoreThanOrEqual } from "typeorm";
-import { ContactRequest } from "../entity/ContactRequest";
 import { ContactResponse } from "../entity/ContactResponse";
 import { User } from "../entity/User";
 

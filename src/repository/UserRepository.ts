@@ -1,8 +1,5 @@
 import { EntityRepository, Repository, getRepository, Not, In, MoreThanOrEqual, getCustomRepository } from "typeorm";
-import { ContactRequest } from "../entity/ContactRequest";
-import  {ContactRequestRepository} from  "../repository/ContactRequestRepository";
 import { User } from "../entity/User";
-import { ContactResponse } from "../entity/ContactResponse";
 
 import {Request} from "express";
 var PenpalsDateUtils = require('../helper/PenpalsDateUtils');

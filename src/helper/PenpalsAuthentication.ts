@@ -4,8 +4,7 @@ import { getCustomRepository } from "typeorm";
 
 exports.checkAuth = async function (request) {
 
-	const User = require("../entity/User");
-	var userRepository = getCustomRepository(UserRepository);;
+	var userRepository = getCustomRepository(UserRepository);
 
 	let hUsername = request.header('username');
 	let hToken = request.header(require('../app_config').appTokenName);
@@ -16,7 +15,6 @@ exports.checkAuth = async function (request) {
 	});
 
 	var controlToken = userRepository.CreateControlToken(request,userToCheck);
-
 
 	//controllo formale
 	console.log('formal-check');
