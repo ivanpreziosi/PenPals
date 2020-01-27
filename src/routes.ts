@@ -13,19 +13,19 @@ export const Routes = [
         isPublic: false
     },
     {
-        method: "get",
-        route: "/" + AppConfig.version + "/inbox",
-        controller: UserController,
-        action: "inbox",
-        isPublic: false
-    },
-    {
         method: "post",
         route: "/" + AppConfig.version + "/users",
         controller: UserController,
         action: "save",
         isPublic: true
     },
+    {
+        method: "get",
+        route: "/" + AppConfig.version + "/inbox",
+        controller: UserController,
+        action: "inbox",
+        isPublic: false
+    },    
     {
         method: "post",
         route: "/" + AppConfig.version + "/login",
