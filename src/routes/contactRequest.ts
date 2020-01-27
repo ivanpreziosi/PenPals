@@ -14,15 +14,11 @@ router.get('/mine', function (req, res, next) {
     authResult.then(function (authResult) {
       let contactRequestController = new ContactRequestController;
       const result = contactRequestController.mine(req, res);
-      if (result instanceof Promise) {
-        result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./tpl/UnauthorizedResponse'))).catch(e => res.json(require('./tpl/UnauthorizedResponse')));
-      } else if (result !== null && result !== undefined) {
-        res.json(result);
-      }
+      result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('../tpl/UnauthorizedResponse'))).catch(e => res.json(require('../tpl/UnauthorizedResponse')));
     }, function (err) {
       //authresult ritorna picche!
       console.log("Authorization denied");
-      res.json(require('./tpl/UnauthorizedResponse'));
+      res.json(require('../tpl/UnauthorizedResponse'));
     });
 });
 
@@ -32,15 +28,11 @@ router.post('/', function (req, res, next) {
     authResult.then(function (authResult) {
       let contactRequestController = new ContactRequestController;
       const result = contactRequestController.save(req, res);
-      if (result instanceof Promise) {
-        result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./tpl/UnauthorizedResponse'))).catch(e => res.json(require('./tpl/UnauthorizedResponse')));
-      } else if (result !== null && result !== undefined) {
-        res.json(result);
-      }
+      result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('../tpl/UnauthorizedResponse'))).catch(e => res.json(require('../tpl/UnauthorizedResponse')));
     }, function (err) {
       //authresult ritorna picche!
       console.log("Authorization denied");
-      res.json(require('./tpl/UnauthorizedResponse'));
+      res.json(require('../tpl/UnauthorizedResponse'));
     });
 });
 
@@ -50,15 +42,11 @@ router.get('/all', function (req, res, next) {
     authResult.then(function (authResult) {
       let contactRequestController = new ContactRequestController;
       const result = contactRequestController.all(req, res);
-      if (result instanceof Promise) {
-        result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./tpl/UnauthorizedResponse'))).catch(e => res.json(require('./tpl/UnauthorizedResponse')));
-      } else if (result !== null && result !== undefined) {
-        res.json(result);
-      }
+      result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('../tpl/UnauthorizedResponse'))).catch(e => res.json(require('../tpl/UnauthorizedResponse')));
     }, function (err) {
       //authresult ritorna picche!
       console.log("Authorization denied");
-      res.json(require('./tpl/UnauthorizedResponse'));
+      res.json(require('../tpl/UnauthorizedResponse'));
     });
 });
 
@@ -68,15 +56,11 @@ router.get('/all/:userId', function (req, res, next) {
     authResult.then(function (authResult) {
       let contactRequestController = new ContactRequestController;
       const result = contactRequestController.user(req, res);
-      if (result instanceof Promise) {
-        result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./tpl/UnauthorizedResponse'))).catch(e => res.json(require('./tpl/UnauthorizedResponse')));
-      } else if (result !== null && result !== undefined) {
-        res.json(result);
-      }
+      result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('../tpl/UnauthorizedResponse'))).catch(e => res.json(require('../tpl/UnauthorizedResponse')));
     }, function (err) {
       //authresult ritorna picche!
       console.log("Authorization denied");
-      res.json(require('./tpl/UnauthorizedResponse'));
+      res.json(require('../tpl/UnauthorizedResponse'));
     });
 });
 
@@ -86,15 +70,11 @@ router.get('/:reqId', function (req, res, next) {
     authResult.then(function (authResult) {
       let contactRequestController = new ContactRequestController;
       const result = contactRequestController.single(req, res);
-      if (result instanceof Promise) {
-        result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('./tpl/UnauthorizedResponse'))).catch(e => res.json(require('./tpl/UnauthorizedResponse')));
-      } else if (result !== null && result !== undefined) {
-        res.json(result);
-      }
+      result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('../tpl/UnauthorizedResponse'))).catch(e => res.json(require('../tpl/UnauthorizedResponse')));
     }, function (err) {
       //authresult ritorna picche!
       console.log("Authorization denied");
-      res.json(require('./tpl/UnauthorizedResponse'));
+      res.json(require('../tpl/UnauthorizedResponse'));
     });
 });
 
