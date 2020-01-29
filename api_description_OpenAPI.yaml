@@ -25,7 +25,7 @@ paths:
 #  +-+-+-+-+ +-+-+-+-+-+ 
 #  |U|S|E|R| |L|O|G|I|N|
 #  +-+-+-+-+ +-+-+-+-+-+ 
-  /login:
+  /users/login:
     post:
       tags:
       - User
