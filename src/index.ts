@@ -17,7 +17,7 @@ var AppConfig = require('./app_config');
  * If connection options parameter is omitted then connection options are read from ormconfig file or environment variables.
  */
 createConnection().then(async connection => {
-
+    
     var listenPort = AppConfig.listenPort;
 
     // create express app
