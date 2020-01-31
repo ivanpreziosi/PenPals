@@ -29,7 +29,7 @@ createConnection().then(async connection => {
 
     app.use(function (req, res, next) {
         console.log(req.method+" "+req.path);
-        next();
+        return next();
     });
 
     app.use(function (req, res, next) {
