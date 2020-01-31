@@ -33,7 +33,7 @@ export class UserRepository extends Repository<User> {
 	}
 
 	CreateControlToken(request: Request, User: User){
-		console.log("creating ControlToken");
+		console.log("creating ControlToken"+User);
 		console.log("username: "+User.username);
 		console.log("session_token: "+User.sessionToken);
 		console.log("control token: "+Md5.init(User.username+User.sessionToken));
