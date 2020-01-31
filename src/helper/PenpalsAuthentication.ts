@@ -2,7 +2,13 @@
 import { UserRepository } from "../repository/UserRepository";
 import { getCustomRepository } from "typeorm";
 
-exports.checkAuth = async function (request) {
+exports.checkAuth = async function (request, response, next) {
+
+	if(request.path == '/users/login' || (request.path == '/users' && request.method == 'POST')){
+		next();
+	}
+
+	let authenticated = true;
 
 	var userRepository = getCustomRepository(UserRepository);
 
@@ -10,11 +16,11 @@ exports.checkAuth = async function (request) {
 	let hToken = request.header(require('../app_config').appTokenName);
 
 	var userToCheck = await userRepository.findOne({
-		select: ['username','id','sessionToken','sessionCreateTime'],
-		where: {username: hUsername}
+		select: ['username', 'id', 'sessionToken', 'sessionCreateTime'],
+		where: { username: hUsername }
 	});
 
-	var controlToken = userRepository.CreateControlToken(request,userToCheck);
+	var controlToken = userRepository.CreateControlToken(request, userToCheck);
 
 	//controllo formale
 	console.log('formal-check');
@@ -30,12 +36,14 @@ exports.checkAuth = async function (request) {
 			console.log(err);
 		});
 
-		throw new Error("Token formally invalid");
+		authenticated = false;
+		//throw new Error("Token formally invalid");
+		response.json(require('../tpl/UnauthorizedResponse'));
 	}
 
 	//controllo scadenza
 	console.log('expiration-check');
-	if(!userRepository.checkTokenExpiration(userToCheck)){
+	if (!userRepository.checkTokenExpiration(userToCheck)) {
 		console.log('EXPIRED-TOKEN');
 		//azzero il token per sicurezza
 		userRepository.findByUsername(hUsername).then(function (userToUpdate) {
@@ -45,13 +53,15 @@ exports.checkAuth = async function (request) {
 		}, function (err) {
 			console.log(err);
 		});
-
-		throw new Error("Token expired!");
+		authenticated = false;
+		//throw new Error("Token expired!");
+		response.json(require('../tpl/UnauthorizedResponse'));
 	}
 
+	if (authenticated) {
+		next();
+	}
 
-	return '{}';
-	
 };
 
 exports.unauthorizedResponse = require('../tpl/UnauthorizedResponse');

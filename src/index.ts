@@ -9,6 +9,7 @@ var contactRequestRouter = require('./routes/contactRequest');
 var contactResponseRouter = require('./routes/contactResponse');
 
 var AppConfig = require('./app_config');
+var Auth = require('./helper/PenpalsAuthentication');
 
 //
 /**
@@ -17,7 +18,7 @@ var AppConfig = require('./app_config');
  * If connection options parameter is omitted then connection options are read from ormconfig file or environment variables.
  */
 createConnection().then(async connection => {
-    
+
     var listenPort = AppConfig.listenPort;
 
     // create express app
@@ -25,6 +26,15 @@ createConnection().then(async connection => {
     app.use(bodyParser.urlencoded({
         extended: true
     }));
+
+    app.use(function (req, res, next) {
+        console.log(req.method+" "+req.path);
+        next();
+    });
+
+    app.use(function (req, res, next) {
+        Auth.checkAuth(req,res,next);
+    });
 
     app.use('/', indexRouter);
     app.use('/users', usersRouter);
