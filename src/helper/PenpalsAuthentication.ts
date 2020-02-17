@@ -10,7 +10,7 @@ exports.checkAuth = async function (request, response, next) {
 	}
 
 	console.log("Private");
-	let authenticated = true;
+
 
 	var userRepository = getCustomRepository(UserRepository);
 
@@ -23,9 +23,9 @@ exports.checkAuth = async function (request, response, next) {
 	});
 
 	// unknown user
-	if(userToCheck == null || userToCheck === undefined){
+	if (userToCheck == null || userToCheck === undefined) {
 		console.log('userToCheck NULL error: hUsername: ' + hUsername);
-		authenticated = false;
+
 		//throw new Error("Token formally invalid");
 		response.json(require('../tpl/UnauthorizedResponse'));
 		return;
@@ -47,7 +47,7 @@ exports.checkAuth = async function (request, response, next) {
 			console.log(err);
 		});
 
-		authenticated = false;
+
 		//throw new Error("Token formally invalid");
 		response.json(require('../tpl/UnauthorizedResponse'));
 		return;
@@ -65,15 +65,14 @@ exports.checkAuth = async function (request, response, next) {
 		}, function (err) {
 			console.log(err);
 		});
-		authenticated = false;
+
 		//throw new Error("Token expired!");
 		response.json(require('../tpl/UnauthorizedResponse'));
 		return;
 	}
 
-	if (authenticated) {
-		return next();
-	}
+	return next();
+
 
 
 };
