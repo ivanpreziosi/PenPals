@@ -25,10 +25,7 @@ exports.checkAuth = async function (request, response, next) {
 	// unknown user
 	if (userToCheck == null || userToCheck === undefined) {
 		console.log('userToCheck NULL error: hUsername: ' + hUsername);
-
-		//throw new Error("Token formally invalid");
-		response.json(require('../tpl/UnauthorizedResponse'));
-		return;
+		return next(new Error('userToCheck NULL error: hUsername: ' + hUsername));
 	}
 
 	var controlToken = userRepository.CreateControlToken(request, userToCheck);
@@ -46,11 +43,7 @@ exports.checkAuth = async function (request, response, next) {
 		}, function (err) {
 			console.log(err);
 		});
-
-
-		//throw new Error("Token formally invalid");
-		response.json(require('../tpl/UnauthorizedResponse'));
-		return;
+		return next(new Error('MALFORMED-TOKEN: ht' + hToken + "  ct" + controlToken));
 	}
 
 	//controllo scadenza
@@ -65,10 +58,7 @@ exports.checkAuth = async function (request, response, next) {
 		}, function (err) {
 			console.log(err);
 		});
-
-		//throw new Error("Token expired!");
-		response.json(require('../tpl/UnauthorizedResponse'));
-		return;
+		return next(new Error('EXPIRED-TOKEN'));
 	}
 
 	return next();

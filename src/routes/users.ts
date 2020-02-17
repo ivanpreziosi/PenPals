@@ -12,28 +12,28 @@ var Auth = require('../helper/PenpalsAuthentication');
 router.get('/', function (req, res, next) {
   let userController = new UserController;
   const result = userController.profile(req, res);
-  result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('../tpl/UnauthorizedResponse'))).catch(e => res.json(require('../tpl/UnauthorizedResponse')));
+  result.then(result => result !== null && result !== undefined ? res.json(result) : next(new Error('Controller Error'))).catch(e => next(e));
 });
 
 /* POST save user */
 router.post('/', function (req, res, next) {
   let userController = new UserController;
   const result = userController.save(req, res);
-  result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('../tpl/UnauthorizedResponse'))).catch(e => res.json(require('../tpl/UnauthorizedResponse')));
+  result.then(result => result !== null && result !== undefined ? res.json(result) : next(new Error('Controller Error'))).catch(e => next(e));
 });
 
 /* POST login user */
 router.post('/login', function (req, res, next) {
   let userController = new UserController;
   const result = userController.login(req, res);
-  result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('../tpl/UnauthorizedResponse'))).catch(e => res.json(require('../tpl/UnauthorizedResponse')));
+  result.then(result => result !== null && result !== undefined ? res.json(result) : next(new Error('Controller Error'))).catch(e => next(e));
 });
 
-/* POST inbox user */
+/* GET inbox user */
 router.get('/inbox', function (req, res, next) {
   let userController = new UserController;
   const result = userController.inbox(req, res);
-  result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('../tpl/UnauthorizedResponse'))).catch(e => res.json(require('../tpl/UnauthorizedResponse')));
+  result.then(result => result !== null && result !== undefined ? res.json(result) : next(new Error('Controller Error'))).catch(e => next(e));
 });
 
 module.exports = router;

@@ -12,35 +12,35 @@ var Auth = require('../helper/PenpalsAuthentication');
 router.get('/mine', function (req, res, next) {
   let contactRequestController = new ContactRequestController;
   const result = contactRequestController.mine(req, res);
-  result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('../tpl/UnauthorizedResponse'))).catch(e => res.json(require('../tpl/UnauthorizedResponse')));
+  result.then(result => result !== null && result !== undefined ? res.json(result) : next(new Error('Controller Error'))).catch(e => next(e));
 });
 
 /* POST save request */
 router.post('/', function (req, res, next) {
   let contactRequestController = new ContactRequestController;
   const result = contactRequestController.save(req, res);
-  result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('../tpl/UnauthorizedResponse'))).catch(e => res.json(require('../tpl/UnauthorizedResponse')));
+  result.then(result => result !== null && result !== undefined ? res.json(result) : next(new Error('Controller Error'))).catch(e => next(e));
 });
 
 /* GET  all open requests */
 router.get('/all', function (req, res, next) {
   let contactRequestController = new ContactRequestController;
   const result = contactRequestController.all(req, res);
-  result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('../tpl/UnauthorizedResponse'))).catch(e => res.json(require('../tpl/UnauthorizedResponse')));
+  result.then(result => result !== null && result !== undefined ? res.json(result) : next(new Error('Controller Error'))).catch(e => next(e));
 });
 
 /* GET all open request of user */
 router.get('/all/:userId', function (req, res, next) {
   let contactRequestController = new ContactRequestController;
   const result = contactRequestController.user(req, res);
-  result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('../tpl/UnauthorizedResponse'))).catch(e => res.json(require('../tpl/UnauthorizedResponse')));
+  result.then(result => result !== null && result !== undefined ? res.json(result) : next(new Error('Controller Error'))).catch(e => next(e));
 });
 
 /* GET  a single request */
 router.get('/:reqId', function (req, res, next) {
   let contactRequestController = new ContactRequestController;
   const result = contactRequestController.single(req, res);
-  result.then(result => result !== null && result !== undefined ? res.json(result) : res.json(require('../tpl/UnauthorizedResponse'))).catch(e => res.json(require('../tpl/UnauthorizedResponse')));
+  result.then(result => result !== null && result !== undefined ? res.json(result) : next(new Error('Controller Error'))).catch(e => next(e));
 });
 
 module.exports = router;

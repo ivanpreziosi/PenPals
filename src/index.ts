@@ -23,23 +23,33 @@ createConnection().then(async connection => {
 
     // create express app
     const app = express();
+
+    //middleware stack
     app.use(bodyParser.urlencoded({
         extended: true
     }));
 
     app.use(function (req, res, next) {
-        console.log(req.method+" "+req.path);
+        console.log(req.method + " " + req.path);
         return next();
     });
 
+    //app.use(function (req, res, next) {
     app.use(function (req, res, next) {
-        Auth.checkAuth(req,res,next);
+        Auth.checkAuth(req, res, next);
     });
 
     app.use('/', indexRouter);
     app.use('/users', usersRouter);
     app.use('/reqs', contactRequestRouter);
     app.use('/resp', contactResponseRouter);
+
+    //error handlers
+    app.use(function errorHandler(err, req, res, next) {
+        var unauthorizedResponse = require('./tpl/UnauthorizedResponse');
+        unauthorizedResponse.responseData.message = err.message;
+        res.json(unauthorizedResponse);
+    });
 
     // start express server
     app.listen(listenPort);
