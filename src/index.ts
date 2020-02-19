@@ -34,7 +34,6 @@ createConnection().then(async connection => {
         return next();
     });
 
-    //app.use(function (req, res, next) {
     app.use(function (req, res, next) {
         Auth.checkAuth(req, res, next);
     });
@@ -44,7 +43,7 @@ createConnection().then(async connection => {
     app.use('/reqs', contactRequestRouter);
     app.use('/resp', contactResponseRouter);
 
-    //error handlers
+    //error handler
     app.use(function errorHandler(err, req, res, next) {
         var unauthorizedResponse = require('./tpl/UnauthorizedResponse');
         unauthorizedResponse.responseData.message = err.message;
