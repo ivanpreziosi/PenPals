@@ -23,7 +23,6 @@ export class ContactRequestController {
             console.log(loggedUser);
             //get requests
             const result = await this.contactRequestRepository.find({ where: { user: loggedUser, requestCreateTime: MoreThanOrEqual(DateHelper.getRequestExpirationDate().toString()) } });
-
             return result;
         } catch (e) {
             return e;
